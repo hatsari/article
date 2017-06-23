@@ -143,15 +143,62 @@ packer build ./packer.json
 
 이제 새로운 AMI를 테스트하기 위해 추가된 EBS 볼륨으로 인스턴스를 생성하고 제공된 [cloud-init 설정 예제](https://raw.githubusercontent.com/kintoandar/bakery/master/cloud-init-example.conf)를 [user-data](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html)로 사용하고, 부팅 이후에는 cloud-init 로그를 확인할 수 있다.
 
+```
+less /var/log/cloud-init-output.log
+```
+
+/root/bakery/cloud-init.json이 생성되었고 앤서블이 모든 설정을 업데이트하였는지 확인하라. 특히 cloud_init=true 설정 확인이 필요하다.
+
+### Profit!
+기존 인스턴스를 삭제하고 새로운 인스턴스를 띄운 후, 데이터 볼륨을 따로 붙일 수도 있을텐데 이 때는 앤서블이 이를 핸들링하는 로직을 수행할 것이다.
+
+이런 식으로 인스턴스를 관리할 때는 Terraform을 사용하는 것이 편리하다. 오직 cloud-init 파일을 템플릿화해서 관리하고 인스턴스에 볼륨만 붙이면 되는 작업의 경우를 말한다. [여기](https://raw.githubusercontent.com/kintoandar/bakery/master/cloud-init-example.conf)에 cloud-init의 예제가 있으므로 이를 사용해서 템플릿으로 사용할 수 있다.
+
+Terraform 스크립트의 예제는 다음과 같다.
+
+> resource "aws_instance" "box" {
+> ami = "ami-1234568"
+> instance_type = "t2.micro"
+> key_name = "mykey"
+> subnet_id = "subnet-12345678"
+> user_data = "${data.template_file.template.rendered}"
+> vpc_security_group_ids = ["sg-12345678"]
+> associate_public_ip_address = true
+> root_block_device {
+> volume_size = 8
+> volume_type = "gp2"
+> }
+> }
+> resource "aws_ebs_volume" "data_volume" {
+> availability_zone = "eu-central-1a"
+> size = 10
+> type = "gp2"
+> # If defined a snapshot will be used
+> snapshot_id = ""
+> }
+> resource "aws_volume_attachment" "attach_volume" {
+> device_name = "/dev/xvdb"
+> volume_id = "${aws_ebs_volume.data_volume.id}"
+> instance_id = "${aws_instance.box.id}"
+> }
+> data "template_file" "template" {
+> template = "init.tpl"
+> vars {
+> hostname = "toast01"
+> domain = "bakery.inet"
+> prometheus_enabled = true
+> prometheus_data_dir = "/var/lib/prometheus"
+> prometheus_volume = "/dev/xvdb"
+> prometheus_volume_label = "DATA"
+> }
+> }
 
 
-
-Now, to test the new AMI, just launch it with an extra EBS volume and use the provided cloud-init configuration example as the user-data. After the boot, you can check the cloud-init log in the instance:
-
-In this example we want to spin up an instance with Prometheus using a separate data volume, useful for instance failures and service upgrades. The flow is something like this:
-
-I’ve built a small example to demonstrate how everything comes together so you can try it out. Obviously, this is far, far away from production ready but you’ll get the gist and it’ll make the entire workflow much clearer.
-
-With this approach, the code used for the AMI’s bake is the same as the one used on the final provision during boot up. The only difference is the code flow on the playbook between the two steps.
 ## Pro tips
+- Packer로 json 파일을 다루는 부분은 그냥 스킵할 수 있다. 대신 앤서블의 --extra-vars를 사용해서 이미지를 생성하면 된다.
+- Terraform의 aws_ebs_volume을 사용해서, 볼륨 데이터의 기본 이미지로 스냅샷을 사용할 수 있다. 이렇게  사용하면 이슈 발생시 데이터 볼륨을 롤백(rollback)할 수 있어서 매우 유용하다.
+
 ## Ready to be served
+이 방법이 최고라고 단언할 수는 없지만, 내가 원하는 모든 요구사항을 충족시켰다. 그리고 이 방식이 진행되는 과정은 계속해서 업데이트하도록 하겠다.
+
+Happy Baking!
