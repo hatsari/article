@@ -84,19 +84,19 @@ AMI가 cloud-init 파일로 인스턴스화 되었을 때, 앤서블 플레이�
 당신이 굉장한 Berkshelf 와  berks 벤더에 익숙하다면, ansible-galaxy는 유사한 목적을 제공하고 있어서, 앤서블 롤(Role)의 의존성을 해결해주고 로컬로 복제본을 만들어 준다.
 심지어 공개된 저장소가 아닌 사설 저장소도 만들 수 있으며 그 예제는 다음과 같다.
 
-'''
+ ```
 ~ $ cat requirements.yml
 ---
 - src: git@github.com:PrivateCompany/awesome-role.git
   scm: git
   version: v1.0.0
   name: awesome-role
-'''
+ ```
 
 다음 명령으로는 의존성있는 롤을 다운받을 수 있다.
-'''
+ ```
 ansible-galaxy install -r ./requirements.yml -p ./roles
-'''
+ ```
 
 ### Ansible
 롤을 사용하면 코드 재사용이 향상된다. 그리고 알아보기 힘든 sed 한줄코딩 대신에, 보기 편한 템플릿을 사용해라(물론 정규표현식 완소!)
