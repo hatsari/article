@@ -1,7 +1,7 @@
 * 원본: https://blog.kintoandar.com/2017/06/Baking-delicious-cloud-instances.html
 
 
-#맛있게 클라우드 인스턴스 굽는 방법, Baking delicious cloud instances
+# 맛있게 클라우드 인스턴스 굽는 방법, Baking delicious cloud instances
 
 ![baked cake](https://blog.kintoandar.com/images/cake.jpg)
 
@@ -49,7 +49,7 @@
 Brent([The Phoenix Project](https://www.goodreads.com/book/show/17255186-the-phoenix-project)의 IT 닌자)같은 사람이 되는 것이 이제 선택이 아닌 필수이다. 늘어나는 시스템 그리고 이에 따른 비즈니스의 성장을 잘 지원하기 위해서 기술력이 잘 전파되고 모든 사람이 우리가 만든 도구를 수정하고 개선하고 잘 활용할 수 있도록 해야 한다. 
 
 ## Infrastructure Management
-![terraform](https://blog.kintoandar.com/images/terraform.png
+![terraform](https://blog.kintoandar.com/images/terraform.png)
 Terraform같은 툴은 전체 인프라를 관리할 때 오케스트레이션에서 발생할 수 있는 간극을 메워주고자 한다. 하지만 이 제품을 개별 관리를 위한 설정관리 도구라고 생각하지는 않는다. 적어도 인스턴스 측면에서는  인스턴스가 사설 서브넷망 안쪽에 존재하고, 작동방식이 user_data 설정을 모아주고, cloud-init 스크립트를 삽입하는 것을 가정하면 된다.
 
 ## Cooking up a plan
@@ -67,6 +67,7 @@ Terraform같은 툴은 전체 인프라를 관리할 때 오케스트레이션�
 
 ## Components
 이 작업 흐름도는 몇 가지 주요 구성요소를 가지고 있는데 각각이 자신이 담당하는 작업과 역할이 별도로 있다.
+
 ### Orchestrator
 모든 작업이 촉발되는(triggered) 시점에 원하는 걸 하나 골라라.
 - Jenkins
@@ -83,29 +84,31 @@ AMI가 cloud-init 파일로 인스턴스화 되었을 때, 앤서블 플레이�
 당신이 굉장한 Berkshelf 와  berks 벤더에 익숙하다면, ansible-galaxy는 유사한 목적을 제공하고 있어서, 앤서블 롤(Role)의 의존성을 해결해주고 로컬로 복제본을 만들어 준다.
 심지어 공개된 저장소가 아닌 사설 저장소도 만들 수 있으며 그 예제는 다음과 같다.
 
-₩₩₩
+'''
 ~ $ cat requirements.yml
 ---
 - src: git@github.com:PrivateCompany/awesome-role.git
   scm: git
   version: v1.0.0
   name: awesome-role
-₩₩₩
+'''
 
 다음 명령으로는 의존성있는 롤을 다운받을 수 있다.
-₩₩₩
+'''
 ansible-galaxy install -r ./requirements.yml -p ./roles
-₩₩₩
+'''
 
+### Ansible
+롤을 사용하면 코드 재사용이 향상된다. 그리고 알아보기 힘든 sed 한줄코딩 대신에, 보기 편한 템플릿을 사용해라(물론 정규표현식 완소!)
 
+롤을 작업 파일당 분리하기가 어렵다면, 설치된 것과 분리해서 템플릿 형태로 사용할 수도 있다. 이 경우에는 이미지를 만들거나, 부팅시 최종 설정을 할 때, 코드 워크플로우를 분리할 수 있기 때문에 매우 유용하다.
 
-If you’re familiar with the awesome Berkshelf and berks vendor, ansible-galaxy has a similar purpose to resolve Ansible roles dependencies and create a local copy of them.
+### packer
+![packer](https://blog.kintoandar.com/images/packer.png)
 
-When the AMI is instantiated using our cloud-init file, the Ansible playbook will be ran again, now locally, but as the override cloud_init will be enabled a different flow will be performed.
-
-Where the project repository is checked out and all dependencies are stored. This path will be backed up and sent into the AMI at /root/bakery by our Ansible playbook.
-
+[이전 글](https://blog.kintoandar.com/2015/01/veewee-packer-kickstarting-vms-into-gear.html)을 참고하라.
 
 ## Tasting some baked goods
+
 ## Pro tips
 ## Ready to be served
