@@ -1,6 +1,3 @@
-* 원본: https://blog.kintoandar.com/2017/06/Baking-delicious-cloud-instances.html
-
-
 # 맛있게 클라우드 인스턴스 굽는 방법, Baking delicious cloud instances
 
 ![baked cake](https://blog.kintoandar.com/images/cake.jpg)
@@ -156,42 +153,44 @@ less /var/log/cloud-init-output.log
 
 Terraform 스크립트의 예제는 다음과 같다.
 
-> resource "aws_instance" "box" {
-> ami = "ami-1234568"
-> instance_type = "t2.micro"
-> key_name = "mykey"
-> subnet_id = "subnet-12345678"
-> user_data = "${data.template_file.template.rendered}"
-> vpc_security_group_ids = ["sg-12345678"]
-> associate_public_ip_address = true
-> root_block_device {
-> volume_size = 8
-> volume_type = "gp2"
-> }
-> }
-> resource "aws_ebs_volume" "data_volume" {
-> availability_zone = "eu-central-1a"
-> size = 10
-> type = "gp2"
-> # If defined a snapshot will be used
-> snapshot_id = ""
-> }
-> resource "aws_volume_attachment" "attach_volume" {
-> device_name = "/dev/xvdb"
-> volume_id = "${aws_ebs_volume.data_volume.id}"
-> instance_id = "${aws_instance.box.id}"
-> }
-> data "template_file" "template" {
-> template = "init.tpl"
-> vars {
-> hostname = "toast01"
-> domain = "bakery.inet"
-> prometheus_enabled = true
-> prometheus_data_dir = "/var/lib/prometheus"
-> prometheus_volume = "/dev/xvdb"
-> prometheus_volume_label = "DATA"
-> }
-> }
+```
+resource "aws_instance" "box" {
+ami = "ami-1234568"
+instance_type = "t2.micro"
+key_name = "mykey"
+subnet_id = "subnet-12345678"
+user_data = "${data.template_file.template.rendered}"
+vpc_security_group_ids = ["sg-12345678"]
+associate_public_ip_address = true
+root_block_device {
+volume_size = 8
+volume_type = "gp2"
+}
+}
+resource "aws_ebs_volume" "data_volume" {
+availability_zone = "eu-central-1a"
+size = 10
+type = "gp2"
+# If defined a snapshot will be used
+snapshot_id = ""
+}
+resource "aws_volume_attachment" "attach_volume" {
+device_name = "/dev/xvdb"
+volume_id = "${aws_ebs_volume.data_volume.id}"
+instance_id = "${aws_instance.box.id}"
+}
+data "template_file" "template" {
+template = "init.tpl"
+vars {
+hostname = "toast01"
+domain = "bakery.inet"
+prometheus_enabled = true
+prometheus_data_dir = "/var/lib/prometheus"
+prometheus_volume = "/dev/xvdb"
+prometheus_volume_label = "DATA"
+}
+}
+```
 
 
 ## Pro tips
@@ -202,3 +201,7 @@ Terraform 스크립트의 예제는 다음과 같다.
 이 방법이 최고라고 단언할 수는 없지만, 내가 원하는 모든 요구사항을 충족시켰다. 그리고 이 방식이 진행되는 과정은 계속해서 업데이트하도록 하겠다.
 
 Happy Baking!
+
+
+* 원본: https://blog.kintoandar.com/2017/06/Baking-delicious-cloud-instances.html
+위 문서를 한글로 번역했는데 매끄럽지 못 한 부분이 있을 것입니다. 그래도 글 자체가 괜찮기 때문에 도움이 되실 것이라 생각됩니다.
