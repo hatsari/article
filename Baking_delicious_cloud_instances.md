@@ -50,6 +50,7 @@ Brent([The Phoenix Project](https://www.goodreads.com/book/show/17255186-the-pho
 
 ## Infrastructure Management
 ![terraform](https://blog.kintoandar.com/images/terraform.png)
+
 Terraform같은 툴은 전체 인프라를 관리할 때 오케스트레이션에서 발생할 수 있는 간극을 메워주고자 한다. 하지만 이 제품을 개별 관리를 위한 설정관리 도구라고 생각하지는 않는다. 적어도 인스턴스 측면에서는  인스턴스가 사설 서브넷망 안쪽에 존재하고, 작동방식이 user_data 설정을 모아주고, cloud-init 스크립트를 삽입하는 것을 가정하면 된다.
 
 ## Cooking up a plan
@@ -109,6 +110,48 @@ ansible-galaxy install -r ./requirements.yml -p ./roles
 [이전 글](https://blog.kintoandar.com/2015/01/veewee-packer-kickstarting-vms-into-gear.html)을 참고하라.
 
 ## Tasting some baked goods
+이런 접근 방법에 따라, AMI 이미지 생성시 사용한 코드는 부팅시 최종 배포를 위해 사용되는 코드와 동일하다. 오직 하나의 다른 점은 두 단계 사이에 플레이북에 의한 코드 흐름이 있다는 것 뿐이다.
 
+이 모든 것이 통합되어 사용되는 것을 보여주기 위해 간단한 예제를 만들었으므로 누구나 이걸 테스트해 볼 수 있다. 이 코드는 실제 상용 환경에 적용하기에는 많이 많이 부족하다. 하지만 이를 통해 영감을 얻고 전체 흐름도를 명확히 파악하는데 충분히 도움이 될 것이다.
+
+예제에서는 [Prometheus](https://prometheus.io/docs/introduction/overview/)로 인스턴스를 생성할 것이며, 독립된 데이터볼륨을 붙여 인스턴스 장애시 또는 서비스 업그레이드 시에 유용하게 만들 것이다. 흐름도는 다음과 같다.
+
+![flow](https://blog.kintoandar.com/images/bakery_flow.jpg)
+
+### 필요 사항
+예제는 다음 사항을 필요로 한다.
+- AWS API access tokens
+- Packer >= 1.0.0
+- Ansible >= 2.3.0.0
+
+### 재료 섞기
+작업 흐름도에 맞게 AMI를 생성하기 위해서는 아래 코드를 실행하라.
+
+```
+# Get the repo
+git clone https://github.com/kintoandar/bakery.git
+cd bakery
+
+# Download ansible roles dependencies
+ansible-galaxy install -r ./requirements.yml -p ./roles
+
+# Use packer to build the AMI (using ansible)
+export AWS_SECRET_ACCESS_KEY=XXXXXXXXXXXXXXXXXXXXXXXX
+export AWS_ACCESS_KEY_ID=XXXXXXXXXXXXXXXXXX
+packer build ./packer.json
+```
+
+이제 새로운 AMI를 테스트하기 위해 추가된 EBS 볼륨으로 인스턴스를 생성하고 제공된 [cloud-init 설정 예제](https://raw.githubusercontent.com/kintoandar/bakery/master/cloud-init-example.conf)를 [user-data](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html)로 사용하고, 부팅 이후에는 cloud-init 로그를 확인할 수 있다.
+
+
+
+
+Now, to test the new AMI, just launch it with an extra EBS volume and use the provided cloud-init configuration example as the user-data. After the boot, you can check the cloud-init log in the instance:
+
+In this example we want to spin up an instance with Prometheus using a separate data volume, useful for instance failures and service upgrades. The flow is something like this:
+
+I’ve built a small example to demonstrate how everything comes together so you can try it out. Obviously, this is far, far away from production ready but you’ll get the gist and it’ll make the entire workflow much clearer.
+
+With this approach, the code used for the AMI’s bake is the same as the one used on the final provision during boot up. The only difference is the code flow on the playbook between the two steps.
 ## Pro tips
 ## Ready to be served
