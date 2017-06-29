@@ -104,7 +104,7 @@ https://192.168.56.102:443/api/v1/job_templates/7/callback/
 3. 실행 결과
 - 원래 변수인 var1: yongki, var2: alex 가 정상적으로 출력된다.
 
-[no_ext_var](https://github.com/hatsari/article/blob/master/no_vars_curl.png?raw=true)
+![no_ext_var](https://github.com/hatsari/article/blob/master/no_vars_curl.png?raw=true)
 
 ### extra_var 아규먼트를 추가하여 실행
 1. REST API를 호출할 스크립트 생성
@@ -162,7 +162,7 @@ https://192.168.56.102:443/api/v1/job_templates/7/callback/
 3. 실행 결과
 - extra_vars 로 설정한 var1: hello 로 출력되지 않고, 원래 변수인 var1: yongki 출력되었다.
 
-[no_ext_var](https://github.com/hatsari/article/blob/master/no_vars_curl.png?raw=true)
+![no_ext_var](https://github.com/hatsari/article/blob/master/no_vars_curl.png?raw=true)
 
 4. 디버깅
 이슈 해결을 위해 권고하는대로 Ansible Tower GUI의 Job Template에서 "Prompt on launch" 를  활성화시켰다.
@@ -203,9 +203,11 @@ extra-vars로 var1=hello, var2=world로 설정하고 이 변수가 결과로 반
 
 2. 실행 결과
 위 명령은 rhel72에서 실행하였으며, 결과는 아래 화면과 같다.
+
 ![exec_tower-cli](https://github.com/hatsari/article/blob/master/exec_tower-cli.png?raw=true)
 
 3. 결과 확인 
+
 ![result-ext-var-tower-cli](https://github.com/hatsari/article/blob/master/extra_vars_tower-cli.png?raw=true)
 
 extra vars로 선언한 var1=hello, var2=world 모두 정상적으로 출력되는 것을 확인할 수 있다.
