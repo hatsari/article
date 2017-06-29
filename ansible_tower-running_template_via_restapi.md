@@ -39,7 +39,7 @@ Ansible Tower의 Rest API를 통해 Job Template을 실행하는 방법 도출
 ## Job template configuration
 host_key를 사용해서 job template를 실행할 때는, api 호출을 시도하는 호스트가 플레이북의 "hosts: " 항목에 들어가 있어야한다.
 그렇치 않을 경우에는 자신이 인증하지 않은 서버로 판단하여 해당 명령이 실행되지 않는다.
-즉, 플레이북에서 "hosts: rhel71" 로 정의되었다면, 아래 call_simple_command.sh 명령은 rhel72에서만 정상적으로 작동한다.
+즉, 플레이북에서 "hosts: rhel71" 로 정의되었다면, 아래 call_simple_command.sh 명령은 rhel71에서만 정상적으로 작동한다.
 당연한 얘기지만, 이 작업 전에는 rhel71 호스트가 먼저 inventory에 등록되어야 한다.
 
 ![job_template_example](https://github.com/hatsari/article/blob/master/job_template_example.png?raw=true)
