@@ -2,5 +2,5 @@
 Infrastructure as a code(IAC) 또는 IT 자동화 관련된 블로그 및 외부 문서를 번역하여 올리고 있습니다.
 
 1. [Infrastructure as a code 가 무엇이며, 왜 써야 하는가?](1.what_is_infrastructure_as_a_code.md)
-2. [번역-클라우드 인프라스트럭쳐 맛있게 굽기](Baking_delicious_cloud_instances.md)
+2. [번역-클라우드 인프라스트럭쳐 맛있게 굽기](2.Baking_delicious_cloud_instances.md)
 
