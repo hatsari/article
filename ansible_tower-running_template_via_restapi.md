@@ -184,3 +184,17 @@ username: admin
 password: MNQz7jJqQvzj
 ```
 
+1. REST API를 호출할 명령어 실행
+
+extra-vars로 var1=hello, var2=world로 설정하고 이 변수가 결과로 반영되는지 확인하기위해 명령을 실행하겠다.
+이 때, extra-vars를 변수로 전달하기 위해서는 Job Template 설정 화면에서 "Prompt on launch"가 활성화되어 있어야 한다.
+
+```
+[root@rhel72 ~]# tower-cli job launch --job-template=7 --extra-vars="var1=hello var2=world"
+```
+
+2. 실행 결과
+<< tower-cli 결과 >>
+
+3. 결과 확인 
+<< ext-var-tower-cli >>
