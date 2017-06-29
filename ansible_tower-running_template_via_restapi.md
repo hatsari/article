@@ -2,7 +2,9 @@
 
 ## Objective
 Ansible Tower의 Rest API를 통해 Job Template을 실행하는 방법 도출
-- host_key 인증을 통해서 외부의 서버에서 Job Template 실행
+- curl 명령과 host_key 인증을 통해서 외부의 서버에서 Job Template 실행 테스트
+- tower-cli를 통해 외부 변수 전달 및 외부 호스트에서 job template 실행 테스트 
+- rest api로 외부 시스템과 연동하기 쉬운 도구 선택 및 방법 제공
 
 ## Brief Conclusion
 - Ansible Tower에 Rest API를 연동해서 사용하는 방법으로는 tower-cli를 사용할 것을 추천한다.
