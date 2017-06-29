@@ -192,6 +192,7 @@ username: admin
 password: MNQz7jJqQvzj
 ```
 
+### tower-cli 틑 롱해 Job Template 실행 
 1. REST API를 호출할 명령어 실행
 
 extra-vars로 var1=hello, var2=world로 설정하고 이 변수가 결과로 반영되는지 확인하기위해 명령을 실행하겠다.
@@ -215,9 +216,46 @@ extra vars로 선언한 var1=hello, var2=world 모두 정상적으로 출력되�
 
 ![tower-cli-on-external-host](https://github.com/hatsari/article/blob/master/tower-cli_external_host.png?raw=true)
 
-## Conclusion
+### tower-cli를 통해 job 모니터링
+rest api를 통해 명령을 실행하면 해당 명령의 실행결과를 연동 시스템에서 모니터링하고 실행결과를 알 수 있어야 한다.
+이 때는 tower-cli job monitor 명령을 통해 알아낼 수 있다.
+
+![tower cli job monitor](https://github.com/hatsari/article/blob/master/job_monitor_tower-cli.png?raw=true)
+
+또는 tower가 제공하는 notification 기능 중 webhook 을 활용하여 작업이 끝나면 자동으로 결과를 전달하도록 할 수도 있을 것이다.
+또는 playbook에서 uri 모듈을 이용하여 결과를 전달할 수 있다.
+
+예제 YAML 코드
+```
+---
+- block:
+  - name: curl post to Heat
+     uri:
+       url: "{{ heat_endpoint }}"
+       method: POST
+       HEADER_X-Auth-Token: "{{ heat_token }}"
+       HEADER_Content-Type: "application/json"
+       HEADER_Accept: "application/json"
+       body: '{"status": "SUCCESS"}'
+       force_basic_auth: yes
+       status_code: 200
+       body_format: json
+  rescue:
+  - name: curl post to Heat to notify of failure
+     uri:
+       url: "{{ heat_endpoint }}"
+       method: POST
+       HEADER_X-Auth-Token: "{{ heat_token }}"
+       HEADER_Content-Type: "application/json"
+       HEADER_Accept: "application/json"
+       body: '{"status": "FAILURE"}'
+       force_basic_auth: yes
+       status_code: 200
+       body_format: json
+```
+참고사이트: [Open Stack Heat and Ansible Tower Orchestration](https://keithtenzer.com/2016/05/09/openstack-heat-and-ansible-automation-born-in-the-cloud/)
+
+## Summary
 Ansible Tower는 Web Portal 자체만으로도 매우 유용하지만, Rest API를 통해 다른 시스템과 연계되었을 때 더 큰 효용성을 발휘할 수 있다. 하지만 문서를 찾아보고 따라했을 때, 정상적으로 작동하지 않는 경우가 있어서 이를 정리하고자 이 글을 작성하게 되었다.
 명령형 기반으로 ansible-tower를 연동하는 방법은 클라우드에서 새로운 인스턴스를 생성하고 그 인스턴스에 특정 작업을 수행시키고자 할 때 또는 외부 시스템에서 tower의 작업상태를 실행하고 모니터링할 때 많이 사용된다. 하지만 기존에 주로 사용했던 curl을 통한 API 호출이 어느 순간부터 정상적으로 작동하지 않게 되는 경험을 하게 되면서, tower-cli를 검토하게 되었다. tower-cli는 tower가 제공하는 거의 모든 기능을 명령형으로 수행할 수 있게끔 만들어주고 있어서 기존의 curl로 사용했던 작업을 훨씬 단순하고 쉽게 변화시켜 주었다.
 
-## To-Do Next ...
-- rest api를 통해 job template를 실행했을 때, 사용자가 원하는 문자열 또는 json 포맷을 결과로 제공하는 방법을 찾아야 함.
