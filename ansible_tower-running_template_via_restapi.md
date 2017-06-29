@@ -167,5 +167,20 @@ curl: (22) The requested URL returned error: 405 METHOD NOT ALLOWED
 그래서 다음 방법인 tower-cli 로 방법을 전환하였다.(with sobbing)
 
 ## test to run template using tower-cli
+tower-cli 참고 문서는 아래와 같다
+- https://github.com/ansible/tower-cli
+
 ### tower-cli 설치
+```
+pip install ansible-tower-cli
+```
+
+### tower-cli 환경 파일
+
+```
+[root@rhel72 ~]# cat /etc/tower/tower_cli.cfg
+host: 192.168.56.102
+username: admin
+password: MNQz7jJqQvzj
+```
 
