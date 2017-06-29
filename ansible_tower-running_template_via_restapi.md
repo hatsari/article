@@ -201,12 +201,19 @@ extra-vars로 var1=hello, var2=world로 설정하고 이 변수가 결과로 반
 
 2. 실행 결과
 위 명령은 rhel72에서 실행하였으며, 결과는 아래 화면과 같다.
-[exec_tower-cli](https://github.com/hatsari/article/blob/master/exec_tower-cli.png?raw=true)
-
-
+![exec_tower-cli](https://github.com/hatsari/article/blob/master/exec_tower-cli.png?raw=true)
 
 3. 결과 확인 
-[result-ext-var-tower-cli](https://github.com/hatsari/article/blob/master/extra_vars_tower-cli.png?raw=true)
+![result-ext-var-tower-cli](https://github.com/hatsari/article/blob/master/extra_vars_tower-cli.png?raw=true)
 
 extra vars로 선언한 var1=hello, var2=world 모두 정상적으로 출력되는 것을 확인할 수 있다.
 특히, tower-cli를 사용할 경우에는 inventory에 등록되지 않은 서버에서도 정상적으로 extra_vars를 전달할 수 있었다.
+
+![tower-cli-on-external-host](https://github.com/hatsari/article/blob/master/tower-cli_external_host.png?raw=true)
+
+## Conclusion
+Ansible Tower는 Web Portal 자체만으로도 매우 유용하지만, Rest API를 통해 다른 시스템과 연계되었을 때 더 큰 효용성을 발휘할 수 있다. 하지만 문서를 찾아보고 따라했을 때, 정상적으로 작동하지 않는 경우가 있어서 이를 정리하고자 이 글을 작성하게 되었다.
+명령형 기반으로 ansible-tower를 연동하는 방법은 클라우드에서 새로운 인스턴스를 생성하고 그 인스턴스에 특정 작업을 수행시키고자 할 때 또는 외부 시스템에서 tower의 작업상태를 실행하고 모니터링할 때 많이 사용된다. 하지만 기존에 주로 사용했던 curl을 통한 API 호출이 어느 순간부터 정상적으로 작동하지 않게 되는 경험을 하게 되면서, tower-cli를 검토하게 되었다. tower-cli는 tower가 제공하는 거의 모든 기능을 명령형으로 수행할 수 있게끔 만들어주고 있어서 기존의 curl로 사용했던 작업을 훨씬 단순하고 쉽게 변화시켜 주었다.
+
+## To-Do Next ...
+- rest api를 통해 job template를 실행했을 때, 사용자가 원하는 문자열 또는 json 포맷을 결과로 제공하는 방법을 찾아야 함.
