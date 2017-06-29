@@ -42,6 +42,8 @@ host_key를 사용해서 job template를 실행할 때는, api 호출을 시도�
 즉, 플레이북에서 "hosts: rhel71" 로 정의되었다면, 아래 call_simple_command.sh 명령은 rhel72에서만 정상적으로 작동한다.
 당연한 얘기지만, 이 작업 전에는 rhel71 호스트가 먼저 inventory에 등록되어야 한다.
 
+![job_template_example](https://github.com/hatsari/article/blob/master/job_template_example.png?raw=true)
+
 ## test to run template using curl
 이테스트를 위한 참고 문서는 아래와 같다.
 - http://docs.ansible.com/ansible-tower/3.1.3/html/administration/tipsandtricks.html#launch-jobs-curl
