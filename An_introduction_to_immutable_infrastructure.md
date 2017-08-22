@@ -23,40 +23,29 @@ II는 운영환경의 완전 자동화를 필요로 한다. 또한컴퓨트 환�
 * 상대적으로 느린 배포와 더 많은 실패
 인프라스트럭처가 전통적인 유지보수 방식(스트립트든 설정관리 도구를 사용하던) 으로 관리되면, 유리몸([snowflake server](https://martinfowler.com/bliki/SnowflakeServer.html))과 같이 깨지기 쉽다. 그리고 소스관리 프로세스에서 직접 현황을 보지 않고서는 현재 인프라스트럭처 상태를 정확히 파악할 수 없다. 인프라스트럭처가 예상치 못하게 작동하고, 설정 변경을 추적하며 시간을 소비하고, 어플리케이션을 실행하면서 디버깅을 하다보면 고객과의 약속은 깨질수 밖에 없다.
 
-* 장애를 감소시키기 위한 에러와 위험요소 감지하기
-오래살지만 죽을 수밖에없는(long-lived, mutable) 전통적인 시스템은 장애피해를 막기 위해 에러와 위험요소를 파악하는데 의존한다. 하지만 거의 매일 버그리포트가 나오고, 위험한   이제 우리는 이런 원인 파악이 부질없는 짓(Sisyphean undertaking)이라는 걸 알게되었다.   
-* 드릴 발사
+* 장애를 감소시키기 위한 에러와 위험요소 파악
+오래살지만 변하기 쉬운(long-lived, mutable) 전통적인 시스템은 장애피해를 막기 위한 방법으로 에러와 위험요소 파악을 우선시 한다. 하지만 거의 매일 버그리포트가 나오고, 위험한 공격이 계속되는 상황에서 이제 우리는 이런 원인 파악이 부질없는 짓(Sisyphean undertaking)이라는 걸 알게되었다.   
 
-Increasing operational complexity. 
-The rise of distributed service architectures, and the use of dynamic scaling results in vastly more stuff to keep track of. Using mutable maintenance methods for updates or patching configurations across fleets of hundreds or thousands of compute instances is difficult, error-prone, and a time sink.
+* 예방 훈련
+전통적인 인프라스트럭처 상황에서 자동화를 구현한다 하더라도 예기치 못한 방식으로 장애가 발생할 수 있다. 예를 들어 클라우드 제공자가 업데이트나 패치를 위해 하위 인스턴스를 재부팅할 때 처럼 말이다. 우리가 수동으로 인프라스트럭처를 생성하고 관리하면, 그래서 II 자동화 방식을 따르지 않는 상황에서는 이런 이벤트 자체가 예상치 않은 예방 훈련이 될 것이다.
 
-Slower deployments, more failures. 
-When infrastructure is comprised of snowflake components resulting from mutable maintenance methods (whether via scripts or configuration management tools), there’s a lot more that can go wrong. Deviating from a straight-from-source-control process means accurately knowing the state of your infrastructure is impossible. Fidelity is lost as infrastructure behaves in unpredictable ways and time is wasted chasing down configuration drift and debugging the runtime.
+## 불변의 인프라스트럭처가 보여주는 희망
+II는 마치 자연이 인체 시스템을 관리하는 원리와 상당히 유사하다. 인체가 활동하는데 필요한 기본 작동방식은 인체 구성요소가 지속적으로 파괴되고 대체되는 것이다. 이 방식은 면역 시스템에도 동일하게 적용되어 건강상태를 유지하기 위해 세포를 파괴하고, 성장시스템에도 적용되어 여러가지 인체 요소가 파괴와 대체를 통해 성숙해지게 된다. 인간 개개인은 내부 요소가 지속적으로 교체되면서 자아와 자의식을 유지하게 된다. 이런 인체 시스템은 II 패턴과 하나도 다를게 없다.
 
-Identifying errors and threats in order to mitigate harm. 
-Long-lived, mutable systems rely on identifying error or threat to prevent damage. We now know that this is a Sisyphean undertaking, as the near daily announcements of high profile and damaging enterprise exploits attest. And those are only the ones reported. With II and automated regeneration of compute resources, many errors and threats are mitigated whether they are detected or not.
+불변의 인프라스트럭처가 가지는 잇점은 여러가지가 있지만 그 사전 조건은 이런 접근 방법이 어플리케이션에 적용되어 배포가 완전 자동화되고, 복구 방법도 마련되어야 한다.
 
-Fire drills. 
-Artisanal infrastructure allows us to take shortcuts on automation that come back to bite us in unexpected ways, such as when a cloud provider reboots underlying instances to perform their own updates or patches. If we build and maintain our infrastructure manually, and aren’t in the regular routine of II automation, these events become fire drills.
+* 운영의 단순화
+완전 자동화 배포 도구를 활용하면 초기의 "완전(known-good)" 상태를 유지하면서 이전 버전의 구성요소를 새로운 버전으로 바꿀 수 있다. 그리고 II 환경에서는 변경되는 유지보수 도구때문에 발생하는 변화를 추적할 필요가 없기 때문에, 다수의 인스턴스를 유지하는 것도 훨씬 간단해 진다.
 
+* 지속적인 배포와 실패 최소화
+II환경에서 어떤 어플리케이션이 돌아야하고 어떤게 작동하는지 알고 있다. 그리고 업데이트를 배포하는 것과 같은 실제 운영환경에서 매우 일반적이고, 반복되는 작업도 훨씬 적은 실패 확율로 진행할 수 있다. 모든 변경은 소스 관리, CI/CD 배포 프로스세에 의해 트래킹된다.
 
-Immutable infrastructure provides hope
+* 에러와 위험요소 최소화
+모든 서비스들은 복잡한 하드웨어/소프트웨어 스택위에서 만들어진다. 그리고 시간이 지남에 따라 잘못되게 된다. 기존 인스턴스를 유지하는 대신 자동으로 새로운 인스턴스를 생성함으로 인해 주기적으로 그리고 자주 인스턴스를 재생산할 수 있다. 이 방식은 설정 변경의 위험과 최약성 감소 그리고 SLA(service level agreement)를 유지하는데 매유 효과적이다. 기존 환경에서는 유지보수 훈련이 근본적으로 장애가 발생하기 쉽다.
 
-II shares much in common with how nature maintains advanced biological systems, like you and me. The primary mechanism of fidelity in humans is the constant destruction and replacement of subcomponents. It underlies the immune system, which destroys cells to maintain health. It underlies the growth system, which allows different subsystems to mature over time through destruction and replacement. The individual human being maintains a sense of self and intention, while the underlying components are constantly replaced. Systems managed using II patterns are no different.
+* 클라우드 재부팅? No Problem.
+II환경에서는 운영되는 서비스가 완전 자동화되어 복구될 수 있도록 구현된다. 따라서 클라우드 제공자가 하위 인스턴스를 재부팅시킨다 하더라도 최소한의 어플리케이션 영향도를 가지고 다뤄지게 된다.
 
-The benefits of immutable infrastructure are manifold if applied appropriately to your application and have fully automated deployment and recovery methods for your infrastructure.
+![mutable and immutable infrastructure image](https://d3ansictanv2wj.cloudfront.net/immutable_infrastructure-8346d81e892e98c1308f707a037f4040.gif)
 
-BOOK
-
-
-MPLS in the SDN Era
-By Krzysztof SzarkowiczAntonio Monge Shop now  
-Simplifying operations. With fully-automated deployment methods, you can replace old components with new versions to ensure your systems are never far in time from their initial “known-good” state. Maintaining a fleet of instances becomes much simpler with II since there’s no need to track the changes that occur with mutable maintenance methods.
-Continuous deployments, fewer failures. With II, you know what’s running and how it behaves, deploying updates can become routine and continuous, with fewer failures occurring in production. All change is tracked by your source control and Continuous Integration/Continuous Deployment processes.
-Reduces errors and threats. Services are built atop a complex stack of hardware and software, and things do go wrong over time. By automating replacement instead of maintaining instances, we are, in effect, regenerating instances regularly and more often. This reduces configuration drift, vulnerability surface, and level of effort to keep Service Level Agreements. Many of the maintenance fire drills in mutable systems are taken care of naturally.
-Cloud reboot? No problem! With II you know what you have running, and with fully automated recovery methods for your services in place, cloud reboots of your underlying instances should be handled gracefully and with minimal, if any, application downtime.
-immutable_infrastructure
-
-We have to work very hard to maintain things, and when those things were physical boxes in a rack, this was necessary work because we manually configured hardware. But with logically isolated compute instances that can be instantiated with an API call in an effectively infinite cloud, “maintaining boxes” is an intellectual ball and chain. It ties us to caring about and working on the wrong things. Giving up on them enables you to focus on what matters to the success of your application, rather than being constantly pulled down by high maintenance costs and the difficulty in adopting new patterns.
-
-This is a collaboration between O’Reilly and Luminal. See our statement of editorial independence.
+우리가랙 안의 물리적인 하드웨어를 관리한다면, 당연히 유지보수를 위해 수동으로 관리해야 한다. 왜냐하면 손으로 직접 하드웨어를 구성했기 때문이다. 하지만 논리적으로 분리된 컴퓨트 인스턴스 API 콜을 통해서 클라우드 환경에서 생성될 수 있다. "박스 유지보수(maintaing boxes)"는 지능적으로 관리해야 하는 제약사항(intellectual ball and chain)이다. 유지보수를 하다보면 잘못된 부분에 힘쓰고 업무부하가 발생하게 된다. 이 부분을 포기하면, 정말 신경써야하는 어플리케이션 성공에 집중할 수 있게 된다. 또한 높은 유지보수 비용을 끌어내리고 새로운 패턴 적용의 어려움을 회피할 수있다.
