@@ -13,7 +13,7 @@ So I'll show you the two way of pull mode feature.
 1. create git repo for ansible playbook repository
 1. write down sample playbook to execute
   - filename: ansible-pull.yml
-```
+```yaml
 ---
 - name: ansible pull sample
   hosts: localhost
