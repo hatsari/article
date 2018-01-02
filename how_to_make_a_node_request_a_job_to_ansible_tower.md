@@ -33,12 +33,12 @@ So I'll show you the two way of pull mode feature.
 
 1. create inventory file
   - filename: hosts
-```
+```yaml
 localhost connection=local
 ```
 
 1. execute on node
-```
+```shell
 vm> ansible-pull -d /tmp/project -U https://github.com/hatsari/ansible-pull-sample.git -i /tmp/project/hosts ansible-pull.yml
 
 1. verify result
