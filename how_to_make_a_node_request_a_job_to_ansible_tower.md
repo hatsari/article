@@ -39,6 +39,25 @@ my sample repository is here: https://github.com/hatsari/ansible-pull-sample.
 localhost connection=local
 ```
 
+### upload the files to git repository
+  - ansible-pull.yml
+  - hosts
+  
+```shell
+vm> ls 
+ansible-pull.yml     hosts
+vm> git add ./ ; git commit -m "changed"; git push
+[master 434f05e] changed
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+ Counting objects: 3, done.
+ Delta compression using up to 4 threads.
+ Compressing objects: 100% (3/3), done.
+ Writing objects: 100% (3/3), 301 bytes | 0 bytes/s, done.
+ Total 3 (delta 2), reused 0 (delta 0)
+ remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+ To github.com:hatsari/article.git
+    4a1751d..434f05e  master -> master
+```
 ### execute on node
 basic ansible-pull format is here.
 ```shell
