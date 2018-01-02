@@ -11,6 +11,8 @@ So I'll show you the two way of pull mode feature.
   1. ansible tower's callback.
 ## ansible-pull
 ### create git repo for ansible playbook repository
+my sample repository is here: https://github.com/hatsari/ansible-pull-sample.
+
 ### write down sample playbook to execute
   - filename: ansible-pull.yml
 ```yaml
@@ -38,6 +40,15 @@ localhost connection=local
 ```
 
 ### execute on node
+basic ansible-pull format is here.
+```shell
+vm> ansible-pull -d <destination path> -U <git url> [playbook.yml]
+```
+if playbook file is not specified, it will run 'local.yml' or '<hostname>.yml'
+
+----
+*)Cuation: you must specify full directory path as destination path(-d) . if not, you will encount an error, "ERROR! the playbook: project/ansible-pull.yml could not be found"
+----
 ```shell
 vm> ansible-pull -d /tmp/project -U https://github.com/hatsari/ansible-pull-sample.git -i /tmp/project/hosts ansible-pull.yml
 ```
