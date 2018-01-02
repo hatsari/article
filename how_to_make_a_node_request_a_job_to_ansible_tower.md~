@@ -1,0 +1,13 @@
+# Two way of pull mode in ansible
+In most of case, ansible's push mode is enough to automate a job. but sometimes pull mode is needed to deal with huge amount of nodes.
+then, what is the pull mode and push mode?
+- push mode: ansible's default architecture which push commands to managed nodes and triger it to action.
+- pull mode: chef and puppet's default architecture which each agent fetches the command from control node and execute it.
+
+Traditionally Ansible is run in "push" mode where Ansible playbooks are run from a well known machine or from local machine and this, in turn, makes changes on remote machines as per the inventory.
+
+So I'll show you the two way of pull mode feature. 
+  1. ansible-pull
+  1. ansible tower's callback.
+## ansible-pull
+## ansible tower's callback
