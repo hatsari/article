@@ -69,13 +69,14 @@ vm> ansible-pull -d <destination path> -U <git url> [playbook.yml]
 if playbook file is not specified, it will run 'local.yml' or $hostname.yml
 
 ----
-*Caution: you must specify full directory path as destination path(-d) . if not, you will encount an error*
+*Caution: you must specify absolute full directory path as destination path(-d) . if not, you will encount an error*
 ```shell
 ERROR! the playbook: project/ansible-pull.yml could not be found
 
 ```
 ----
 
+Here is the example of ansible-pull command
 ```shell
 vm> ansible-pull -d /tmp/project -U https://github.com/hatsari/ansible-pull-sample.git -i /tmp/project/hosts ansible-pull.yml
 ```
