@@ -45,11 +45,9 @@ localhost connection=local
   
 ```shell
 vm> ls 
-
 ansible-pull.yml     hosts
-
+vm>
 vm> git add ./ ; git commit -m "changed"; git push
-
 [master 434f05e] changed
  1 file changed, 1 insertion(+), 1 deletion(-)
  Counting objects: 3, done.
