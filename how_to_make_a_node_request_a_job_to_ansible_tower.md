@@ -10,7 +10,7 @@ So I'll show you the two way of pull mode feature.
   1. *ansible-pull*
   1. *ansible tower's callback*
   
-## ansible-pull
+## ansible-pull mode
 ### create git repo for ansible playbook repository
 my sample repository is here: https://github.com/hatsari/ansible-pull-sample.
 
