@@ -40,8 +40,8 @@ localhost connection=local
 ```
 
 ### upload the files to git repository
-  - ansible-pull.yml
-  - hosts
+  - playbook file: ansible-pull.yml
+  - inventory file: hosts
   
 ```shell
 vm> ls 
