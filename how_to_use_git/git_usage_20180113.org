@@ -125,7 +125,7 @@ just follow the below sandbox, this is better than I can explain
 
 ** Git Workflow
 *** Workflow Diagram
-[[./git-workflow.jp]]
+[[./git-workflow.jpg]]
 
   - ref: https://guides.github.com/activities/hello-world/
 
