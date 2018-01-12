@@ -9,10 +9,9 @@ most important thins is to understand the git's concept and basic terminology, i
 ** git concept
 *** basic terminology
 
-  | working tree                  |
+  | working tree    |              |
   | stage(or index) |             |
   | repository      | origin      |
-  |                 | -----       |
   |                 | master      |
   | branch          | check out   |
   |                 | check in    |
