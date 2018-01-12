@@ -18,6 +18,8 @@ most important thins is to understand the git's concept and basic terminology, i
   | tag             |             |
   | head            |             |
 
+-----
+
 *** Git Operation
 [[./git-operations.png]]
 
