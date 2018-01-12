@@ -6,17 +6,40 @@ This article shows you how to create simple git server and explain how to use gi
 for example, git clone, add, commit, push. 
 most important thins is to understand the git's concept and basic terminology, if not, it's not easy to soak into git world.
 
-To make you understand easily, I assume below demo environment.
-** demo environment **
-  - git server: vm1
-  - git client computer: vm2
-  - developer1: John on vm2
-  - developer2: Jane on vm2
+** git concept
+*** basic terminology
+  | --------------- | ----------- |
+  | working tree                  |
+  | -------------   | -----       |
+  | stage(or index) |             |
+  | -----           | -----       |
+  | repository      | origin      |
+  |                 | -----       |
+  |                 | master      |
+  | -----           |             |
+  | branch          | check out   |
+  |                 | check in    |
+  | -----           | -------     |
+  | tag             |             |
+  | --------        | ---------   |
+  | head            |             |
+  | ----------      | ---------   |
+  - 
+[[*** git operation
+./git-operations.png]]
 
 ** setting up private git repository
 Sometimes you should create your own git repository, but github, specially in closed network environment.
 So the first section is to make your own git repository.
   - ref: https://git-scm.com/book/en/v2/Git-on-the-Server-Setting-Up-the-Server
+
+*** demo environment
+To make you understand easily, I assume below demo environment.
+  ** demo environment **
+  - git server: vm1
+  - git client computer: vm2
+  - developer1: John on vm2
+  - developer2: Jane on vm2
 
 *** git user on git server
 At first, we will create git user to allow other user's connection.
@@ -74,8 +97,17 @@ jane@vm2$ git commit -m 'new code added by jane'
 jane@vm2$ git push origin master
 #+END_SRC
 
-** basic git usage
+** Basic Git Usage
+  - ref:kor: https://backlog.com/git-tutorial/kr/intro/intro1_2.html
+  - ref: en: 
+
+*** Online Git Practice 
+just follow the below sandbox, this is better than I can explain
+  -  https://try.github.io/levels/1/challenges/1
+
 ** git workflow
+
+  - https://guides.github.com/activities/hello-world/
 
 #+BEGIN_SRC 
 
