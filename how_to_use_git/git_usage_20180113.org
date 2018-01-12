@@ -8,25 +8,19 @@ most important thins is to understand the git's concept and basic terminology, i
 
 ** git concept
 *** basic terminology
-  | --------------- | ----------- |
+
   | working tree                  |
-  | -------------   | -----       |
   | stage(or index) |             |
-  | -----           | -----       |
   | repository      | origin      |
   |                 | -----       |
   |                 | master      |
-  | -----           |             |
   | branch          | check out   |
   |                 | check in    |
-  | -----           | -------     |
   | tag             |             |
-  | --------        | ---------   |
   | head            |             |
-  | ----------      | ---------   |
-  - 
-[[*** git operation
-./git-operations.png]]
+
+*** git operation
+[[./git-operations.png]]
 
 ** setting up private git repository
 Sometimes you should create your own git repository, but github, specially in closed network environment.
