@@ -7,7 +7,7 @@ for example, git clone, add, commit, push.
 most important thins is to understand the git's concept and basic terminology, if not, it's not easy to soak into git world.
 
 ** git concept
-*** basic terminology
+*** Basic Terminology
 
   | working tree    |              |
   | stage(or index) |             |
@@ -18,7 +18,7 @@ most important thins is to understand the git's concept and basic terminology, i
   | tag             |             |
   | head            |             |
 
-*** git operation
+*** Git Operation
 [[./git-operations.png]]
 
 ** setting up private git repository
