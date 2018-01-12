@@ -1,0 +1,79 @@
+* Simple Git Tutorial
+#+Writer: Alex, Yongki Kim
+#+Date: 01.23.2017
+
+This article shows you how to create simple git server and explain how to use git command.
+for example, git clone, add, commit, push. 
+most important thins is to understand the git's concept and basic terminology, if not, it's not easy to soak into git world.
+
+To make you understand easily, I assume below demo environment.
+** demo environment **
+  - git server: vm1
+  - git client computer: vm2
+  - developer1: John on vm2
+  - developer2: Jane on vm2
+
+** setting up private git repository
+Sometimes you should create your own git repository, but github, specially in closed network environment.
+So the first section is to make your own git repository.
+  - ref: https://git-scm.com/book/en/v2/Git-on-the-Server-Setting-Up-the-Server
+
+*** git user on git server
+At first, we will create git user to allow other user's connection.
+#+BEGIN_QUOTE
+Original guide lets user create ssh-key, but I'll just use password type on ssh connection.
+It is better to use ssh-key, but I want to keep focus on the git based command.  
+#+END_QUOTE
+
+#+BEGIN_SRC 
+## on git server
+vm1$ sudo adduser git
+vm1$ sudo passwd git
+vm1$ su git
+#+END_SRC
+
+*** make git repository on git server
+Let's create *project* directory and initialize it.
+ 
+#+BEGIN_SRC 
+## on git server
+vm1$ mkdir ~git/test_project.git
+vm1$ cd ~git/test_project.git
+vm1$ git init --bare
+Initialized empty Git repository in /home/git/test_project.git/ ## <-- remember this path, copy it. 
+#+END_SRC
+
+*** Create John's project named 'test_project'
+John will create the 1st project.
+
+#+BEGIN_SRC 
+## as John user(vm2)
+john@vm2$ mkdir myproject
+john@vm2$ cd myproject
+john@vm2$ git init
+john@vm2$ echo "the first released project" > README.md
+john@vm2$ git add .
+john@vm2$ git commit -m 'the 1st'
+john@vm2$ git remote add origin git@vm1:/home/git/test_project.git ## <-- paste it from above
+john@vm2$ git push origin master
+#+END_SRC
+
+*** Clone 'test_project' for Jane 
+
+Jane will modify the file and push to master.
+
+#+BEGIN_SRC 
+jane@vm2$ git clone git@vm1:/home/git/test_project.git
+jane@vm2$ cd test_project
+jane@vm2$ echo "jane's code is add here" >> README.md
+jane@vm2$ git add README.md
+jane@vm2$ git commit -m 'new code added by jane'
+jane@vm2$ git push origin master
+#+END_SRC
+
+** basic git usage
+** git workflow
+
+#+BEGIN_SRC 
+
+#+END_SRC
