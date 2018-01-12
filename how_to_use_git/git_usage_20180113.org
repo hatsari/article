@@ -8,16 +8,19 @@ most important thins is to understand the git's concept and basic terminology, i
 
 ** git concept
 *** Basic Terminology
+[[./git-term.png]]
 
-  | working tree    |             |
-  | stage(or index) |             |
-  | repository      | origin      |
-  |                 | master      |
-  | branch          | check out   |
-  |                 | check in    |
-  | tag             |             |
-  | head            |             |
-  |_________________|_____________|
+  | working tree    | the collection of files.                                                                                                 |
+  | stage(or index) | the place to store changes in the working tree before the commit.                                                        |
+  | repository      | origin: normally indicate remote repository                                                                              |
+  | branch          | a named pointer to a commit, *master* is default.                                                                           |
+  |                 | master: normall your own branch                                                                                          |
+  |                 | check out: selecting a branch                                                                                            |
+  | tag             |                                                                                                                          |
+  | head            |                                                                                                                          |
+  | pull request    | proposing your changes and requesting that someone review and pull in your contribution and merge them into their branch |
+  |                 |                                                                                                                          |
+
 #+BEGIN_QUOTE
 for more detailed explaination, please refer to http://www.vogella.com/tutorials/Git/article.html
 #+END_QUOTE
@@ -26,7 +29,7 @@ for more detailed explaination, please refer to http://www.vogella.com/tutorials
 *** Git Operation
 [[./git-operations.png]]
 
-** setting up private git repository
+** Setting up private git repository
 Sometimes you should create your own git repository, but github, specially in closed network environment.
 So the first section is to make your own git repository.
   - ref: https://git-scm.com/book/en/v2/Git-on-the-Server-Setting-Up-the-Server
@@ -96,16 +99,16 @@ jane@vm2$ git push origin master
 #+END_SRC
 
 ** Basic Git Usage
-  - ref:kor: https://backlog.com/git-tutorial/kr/intro/intro1_2.html
-  - ref: en: 
+  - ref: kor: https://backlog.com/git-tutorial/kr/intro/intro1_2.html
+  - ref: en: http://rogerdudler.github.io/git-guide/
 
 *** Online Git Practice 
 just follow the below sandbox, this is better than I can explain
   -  https://try.github.io/levels/1/challenges/1
 
-** git workflow
+** Git Workflow
 
-  - https://guides.github.com/activities/hello-world/
+  - ref: https://guides.github.com/activities/hello-world/
 
 #+BEGIN_SRC 
 
