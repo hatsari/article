@@ -47,7 +47,7 @@ Initialized empty Git repository in /home/git/test_project.git/ ## <-- remember 
 John will create the 1st project.
 
 #+BEGIN_SRC 
-## as John user(vm2)
+## as John user on vm2
 john@vm2$ mkdir myproject
 john@vm2$ cd myproject
 john@vm2$ git init
@@ -58,11 +58,14 @@ john@vm2$ git remote add origin git@vm1:/home/git/test_project.git ## <-- paste 
 john@vm2$ git push origin master
 #+END_SRC
 
+You will get some _password_ message for ssh-key after ** git push origin master ** command.
+Then, press *ENTER* and you will be asked 'ssh password', at this time, input *git's password*.
 *** Clone 'test_project' for Jane 
 
 Jane will modify the file and push to master.
 
 #+BEGIN_SRC 
+## as Jane user on vm2
 jane@vm2$ git clone git@vm1:/home/git/test_project.git
 jane@vm2$ cd test_project
 jane@vm2$ echo "jane's code is add here" >> README.md
