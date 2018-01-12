@@ -9,7 +9,7 @@ most important thins is to understand the git's concept and basic terminology, i
 ** git concept
 *** Basic Terminology
 
-  | working tree    |              |
+  | working tree    |             |
   | stage(or index) |             |
   | repository      | origin      |
   |                 | master      |
@@ -17,8 +17,11 @@ most important thins is to understand the git's concept and basic terminology, i
   |                 | check in    |
   | tag             |             |
   | head            |             |
+  |_________________|_____________|
+#+BEGIN_QUOTE
+for more detailed explaination, please refer to http://www.vogella.com/tutorials/Git/article.html
+#+END_QUOTE
 
------
 
 *** Git Operation
 [[./git-operations.png]]
