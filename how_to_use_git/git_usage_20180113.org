@@ -1,12 +1,29 @@
-#+TITLE: Simple Git Tutorial
-#+description: Using emacs org-mode, write git manual
-#+AUTHOR: Alex, Yongki Kim
-#+Date: 01.23.2017
-
+#+OPTIONS: html-link-use-abs-url:nil html-postamble:auto
+#+OPTIONS: html-preamble:t html-scripts:t html-style:t
+#+OPTIONS: html5-fancy:nil tex:t
+#+HTML_DOCTYPE: xhtml-strict
+#+HTML_CONTAINER: div
+#+DESCRIPTION:
+#+KEYWORDS:
+#+HTML_LINK_HOME:
+#+HTML_LINK_UP:
+#+HTML_MATHJAX:
+#+HTML_HEAD:
+#+HTML_HEAD_EXTRA:
+#+SUBTITLE:
+#+INFOJS_OPT:
+#+CREATOR: <a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.3.1 (<a href="http://orgmode.org">Org</a> mode 8.3.4)
+#+LATEX_HEADER:
 # C+c C+e # default
 #+OPTIONS: html-preamble:t html-scripts:nil html-style:nil
 #+HTML_DOCTYPE: <!doctype html>
 #+HTML_HEAD: <meta name="bestowed-theme" value="themes/none"><script type="text/javascript" src="../build/bestowed.min.js"></script>
+
+#+TITLE: Simple Git Tutorial
+#+Description: Using emacs org-mode, write git manual
+#+AUTHOR: Alex, Yongki Kim
+#+Date: 01.23.2017
+
 
 presentation mode: [[./git_usage_20180113.html]]
 -----
