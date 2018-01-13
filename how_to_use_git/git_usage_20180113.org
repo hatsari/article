@@ -1,39 +1,35 @@
+#+TITLE: Simple Git Tutorial
+#+Description: Using emacs org-mode, write git manual
+#+AUTHOR: Alex, Yongki Kim
+#+Date: 01.23.2017
+
 #+OPTIONS: html-link-use-abs-url:nil html-postamble:auto
-#+OPTIONS: html-preamble:t html-scripts:t html-style:t
+#+OPTIONS: html-preamble:t html-scripts:nil html-style:nil
 #+OPTIONS: html5-fancy:nil tex:t
-#+HTML_DOCTYPE: xhtml-strict
+#+HTML_DOCTYPE: <!doctype html>
 #+HTML_CONTAINER: div
 #+DESCRIPTION:
 #+KEYWORDS:
-#+HTML_LINK_HOME:
-#+HTML_LINK_UP:
-#+HTML_MATHJAX:
-#+HTML_HEAD:
-#+HTML_HEAD_EXTRA:
-#+SUBTITLE:
-#+INFOJS_OPT:
+#+HTML_HEAD: <meta name="bestowed-theme" value="themes/webqem"><script async src="http://s3.amazonaws.com/cdn.robrohan.com/bestowed/bestowed.min.js"></script>
 #+CREATOR: <a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.3.1 (<a href="http://orgmode.org">Org</a> mode 8.3.4)
 #+LATEX_HEADER:
 # C+c C+e # default
-#+OPTIONS: html-preamble:t html-scripts:nil html-style:nil
-#+HTML_DOCTYPE: <!doctype html>
-#+HTML_HEAD: <meta name="bestowed-theme" value="themes/none"><script type="text/javascript" src="../build/bestowed.min.js"></script>
 
 #+TITLE: Simple Git Tutorial
 #+Description: Using emacs org-mode, write git manual
 #+AUTHOR: Alex, Yongki Kim
 #+Date: 01.23.2017
 
-
-presentation mode: [[./git_usage_20180113.html]]
+* Preface
+presentation mode: [[./git_usage_20180113.html][Git Usage]]
 -----
 
 This article shows you how to create simple git server and explain how to use git command.
 for example, git clone, add, commit, push. 
 most important thins is to understand the git's concept and basic terminology, if not, it's not easy to soak into git world.
 
-** Git Concept
-*** Basic Terminology
+* Git Concept
+** Basic Terminology
 [[./git-term.png]]
 
   | working tree    | the set of working files for the repository. these files are changed and committed to repository.                        |
@@ -51,15 +47,15 @@ for more detailed explaination, please refer to http://www.vogella.com/tutorials
 #+END_QUOTE
 
 
-*** Git Operation
+** Git Operation
 [[./git-operations.png]]
 
-** Setting up private git repository
+* Setting up private git repository
 Sometimes you should create your own git repository, but github, specially in closed network environment.
 So the first section is to make your own git repository.
   - ref: https://git-scm.com/book/en/v2/Git-on-the-Server-Setting-Up-the-Server
 
-*** demo environment
+** demo environment
 To make you understand easily, I assume below demo environment.
   ** demo environment **
   - git server: vm1
@@ -67,7 +63,7 @@ To make you understand easily, I assume below demo environment.
   - developer1: John on vm2
   - developer2: Jane on vm2
 
-*** git user on git server
+** git user on git server
 At first, we will create git user to allow other user's connection.
 #+BEGIN_QUOTE
 Original guide lets user create ssh-key, but I'll just use password type on ssh connection.
@@ -81,7 +77,7 @@ vm1$ sudo passwd git
 vm1$ su git
 #+END_SRC shell
 
-*** make git repository on git server
+** make git repository on git server
 Let's create *project* directory and initialize it.
  
 #+BEGIN_SRC shell 
@@ -92,7 +88,7 @@ vm1$ git init --bare
 Initialized empty Git repository in /home/git/test_project.git/ ## <-- remember this path, copy it. 
 #+END_SRC shell
 
-*** Create John's project named 'test_project'
+** Create John's project named 'test_project'
 John will create the 1st project.
 
 #+BEGIN_SRC shell 
@@ -109,7 +105,7 @@ john@vm2$ git push origin master
 
 You will get some _password_ message for ssh-key after ** git push origin master ** command.
 Then, press *ENTER* and you will be asked 'ssh password', at this time, input *git's password*.
-*** Clone 'test_project' for Jane 
+** Clone 'test_project' for Jane 
 
 Jane will modify the file and push to master.
 
@@ -123,16 +119,17 @@ jane@vm2$ git commit -m 'new code added by jane'
 jane@vm2$ git push origin master
 #+END_SRC shell
 
-** Basic Git Usage
-  - ref: kor: https://backlog.com/git-tutorial/kr/intro/intro1_2.html
-  - ref: en: http://rogerdudler.github.io/git-guide/
 
-*** Online Git Practice 
+* Basic Git Usage
+ - ref: kor: https://backlog.com/git-tutorial/kr/intro/intro1_2.html
+ - ref: en: http://rogerdudler.github.io/git-guide/
+** Online Git Practice 
 just follow the below sandbox, this is better than I can explain
   -  https://try.github.io/levels/1/challenges/1
 
-** Git Workflow
-*** Workflow Diagram
+
+* Git Workflow
+** Workflow Diagram
 [[./git-workflow.jpg]]
 
   - ref: https://guides.github.com/activities/hello-world/
@@ -140,7 +137,8 @@ just follow the below sandbox, this is better than I can explain
 #+BEGIN_SRC shell 
 
 #+END_SRC shell
-** Conclution
+
+* Conclution
 Git is very useful to manage your contents not only source codes but also your own documents. 
 Also in this devops erra, knowing the git workflow makes you communicate with other organization easily.
 I hope this document to be helpful.

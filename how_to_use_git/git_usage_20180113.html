@@ -1,17 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<!doctype html>
+<html>
 <head>
-<!-- 2018-01-13 Sat 09:40 -->
-<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<meta  name="viewport" content="width=device-width, initial-scale=1" />
-<title>Simple Git Tutorial</title>
-<meta  name="generator" content="Org-mode" />
-<meta  name="author" content="Alex, Yongki Kim" />
-<meta  name="description" content="Using emacs org-mode, write git manual"
- />
-<meta name="bestowed-theme" value="themes/none"><script type="text/javascript" src="../build/bestowed.min.js"></script>
+<!-- 2018-01-13 Sat 10:06 -->
+<meta  charset="utf-8">
+<meta  name="viewport" content="width=device-width, initial-scale=1">
+<title>Simple Git Tutorial Simple Git Tutorial</title>
+<meta  name="generator" content="Org-mode">
+<meta  name="author" content="Alex, Yongki Kim Alex, Yongki Kim">
+<meta  name="description" content="Using emacs org-mode, write git manual
+Using emacs org-mode, write git manual"
+>
+<meta name="bestowed-theme" value="themes/webqem"><script async src="http://s3.amazonaws.com/cdn.robrohan.com/bestowed/bestowed.min.js"></script>
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
         displayAlign: "center",
@@ -37,70 +36,77 @@
 </head>
 <body>
 <div id="content">
-<h1 class="title">Simple Git Tutorial</h1>
+<h1 class="title">Simple Git Tutorial Simple Git Tutorial</h1>
 <div id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgheadline3">1. Git Concept</a>
+<li><a href="#orgheadline1">1. Preface</a></li>
+<li><a href="#orgheadline4">2. Git Concept</a>
 <ul>
-<li><a href="#orgheadline1">1.1. Basic Terminology</a></li>
-<li><a href="#orgheadline2">1.2. Git Operation</a></li>
+<li><a href="#orgheadline2">2.1. Basic Terminology</a></li>
+<li><a href="#orgheadline3">2.2. Git Operation</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline9">2. Setting up private git repository</a>
+<li><a href="#orgheadline10">3. Setting up private git repository</a>
 <ul>
-<li><a href="#orgheadline4">2.1. demo environment</a></li>
-<li><a href="#orgheadline5">2.2. git user on git server</a></li>
-<li><a href="#orgheadline6">2.3. make git repository on git server</a></li>
-<li><a href="#orgheadline7">2.4. Create John's project named 'test<sub>project</sub>'</a></li>
-<li><a href="#orgheadline8">2.5. Clone 'test<sub>project</sub>' for Jane</a></li>
+<li><a href="#orgheadline5">3.1. demo environment</a></li>
+<li><a href="#orgheadline6">3.2. git user on git server</a></li>
+<li><a href="#orgheadline7">3.3. make git repository on git server</a></li>
+<li><a href="#orgheadline8">3.4. Create John's project named 'test<sub>project</sub>'</a></li>
+<li><a href="#orgheadline9">3.5. Clone 'test<sub>project</sub>' for Jane</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline11">3. Basic Git Usage</a>
+<li><a href="#orgheadline12">4. Basic Git Usage</a>
 <ul>
-<li><a href="#orgheadline10">3.1. Online Git Practice</a></li>
+<li><a href="#orgheadline11">4.1. Online Git Practice</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline13">4. Git Workflow</a>
+<li><a href="#orgheadline14">5. Git Workflow</a>
 <ul>
-<li><a href="#orgheadline12">4.1. Workflow Diagram</a></li>
+<li><a href="#orgheadline13">5.1. Workflow Diagram</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline14">5. Conclution</a></li>
+<li><a href="#orgheadline15">6. Conclution</a></li>
 </ul>
 </div>
 </div>
+
+<div id="outline-container-orgheadline1" class="outline-2">
+<h2 id="orgheadline1"><span class="section-number-2">1</span> Preface</h2>
+<div class="outline-text-2" id="text-1">
 <p>
-presentation mode: <a href="./git_usage_20180113.html">./git_usage_20180113.html</a>
+presentation mode: <a href="./git_usage_20180113.html">Git Usage</a>
 </p>
-<hr  />
+<hr >
 
 <p>
 This article shows you how to create simple git server and explain how to use git command.
 for example, git clone, add, commit, push. 
 most important thins is to understand the git's concept and basic terminology, if not, it's not easy to soak into git world.
 </p>
+</div>
+</div>
 
-<div id="outline-container-orgheadline3" class="outline-2">
-<h2 id="orgheadline3"><span class="section-number-2">1</span> Git Concept</h2>
-<div class="outline-text-2" id="text-1">
-</div><div id="outline-container-orgheadline1" class="outline-3">
-<h3 id="orgheadline1"><span class="section-number-3">1.1</span> Basic Terminology</h3>
-<div class="outline-text-3" id="text-1-1">
+<div id="outline-container-orgheadline4" class="outline-2">
+<h2 id="orgheadline4"><span class="section-number-2">2</span> Git Concept</h2>
+<div class="outline-text-2" id="text-2">
+</div><div id="outline-container-orgheadline2" class="outline-3">
+<h3 id="orgheadline2"><span class="section-number-3">2.1</span> Basic Terminology</h3>
+<div class="outline-text-3" id="text-2-1">
 
 <div class="figure">
-<p><img src="./git-term.png" alt="git-term.png" />
+<p><img src="./git-term.png" alt="git-term.png">
 </p>
 </div>
 
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<table>
 
 
 <colgroup>
-<col  class="org-left" />
+<col  class="org-left">
 
-<col  class="org-left" />
+<col  class="org-left">
 </colgroup>
 <tbody>
 <tr>
@@ -155,21 +161,21 @@ for more detailed explaination, please refer to <a href="http://www.vogella.com/
 </div>
 
 
-<div id="outline-container-orgheadline2" class="outline-3">
-<h3 id="orgheadline2"><span class="section-number-3">1.2</span> Git Operation</h3>
-<div class="outline-text-3" id="text-1-2">
+<div id="outline-container-orgheadline3" class="outline-3">
+<h3 id="orgheadline3"><span class="section-number-3">2.2</span> Git Operation</h3>
+<div class="outline-text-3" id="text-2-2">
 
 <div class="figure">
-<p><img src="./git-operations.png" alt="git-operations.png" />
+<p><img src="./git-operations.png" alt="git-operations.png">
 </p>
 </div>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgheadline9" class="outline-2">
-<h2 id="orgheadline9"><span class="section-number-2">2</span> Setting up private git repository</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-orgheadline10" class="outline-2">
+<h2 id="orgheadline10"><span class="section-number-2">3</span> Setting up private git repository</h2>
+<div class="outline-text-2" id="text-3">
 <p>
 Sometimes you should create your own git repository, but github, specially in closed network environment.
 So the first section is to make your own git repository.
@@ -179,9 +185,9 @@ So the first section is to make your own git repository.
 </ul>
 </div>
 
-<div id="outline-container-orgheadline4" class="outline-3">
-<h3 id="orgheadline4"><span class="section-number-3">2.1</span> demo environment</h3>
-<div class="outline-text-3" id="text-2-1">
+<div id="outline-container-orgheadline5" class="outline-3">
+<h3 id="orgheadline5"><span class="section-number-3">3.1</span> demo environment</h3>
+<div class="outline-text-3" id="text-3-1">
 <p>
 To make you understand easily, I assume below demo environment.
   <b>* demo environment *</b>
@@ -195,9 +201,9 @@ To make you understand easily, I assume below demo environment.
 </div>
 </div>
 
-<div id="outline-container-orgheadline5" class="outline-3">
-<h3 id="orgheadline5"><span class="section-number-3">2.2</span> git user on git server</h3>
-<div class="outline-text-3" id="text-2-2">
+<div id="outline-container-orgheadline6" class="outline-3">
+<h3 id="orgheadline6"><span class="section-number-3">3.2</span> git user on git server</h3>
+<div class="outline-text-3" id="text-3-2">
 <p>
 At first, we will create git user to allow other user's connection.
 </p>
@@ -219,9 +225,9 @@ vm1$ su git
 </div>
 </div>
 
-<div id="outline-container-orgheadline6" class="outline-3">
-<h3 id="orgheadline6"><span class="section-number-3">2.3</span> make git repository on git server</h3>
-<div class="outline-text-3" id="text-2-3">
+<div id="outline-container-orgheadline7" class="outline-3">
+<h3 id="orgheadline7"><span class="section-number-3">3.3</span> make git repository on git server</h3>
+<div class="outline-text-3" id="text-3-3">
 <p>
 Let's create <b>project</b> directory and initialize it.
 </p>
@@ -238,9 +244,9 @@ Initialized empty Git repository in <i>home/git/test<sub>project.git</sub></i> #
 </div>
 </div>
 
-<div id="outline-container-orgheadline7" class="outline-3">
-<h3 id="orgheadline7"><span class="section-number-3">2.4</span> Create John's project named 'test<sub>project</sub>'</h3>
-<div class="outline-text-3" id="text-2-4">
+<div id="outline-container-orgheadline8" class="outline-3">
+<h3 id="orgheadline8"><span class="section-number-3">3.4</span> Create John's project named 'test<sub>project</sub>'</h3>
+<div class="outline-text-3" id="text-3-4">
 <p>
 John will create the 1st project.
 </p>
@@ -265,9 +271,9 @@ Then, press <b>ENTER</b> and you will be asked 'ssh password', at this time, inp
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline8" class="outline-3">
-<h3 id="orgheadline8"><span class="section-number-3">2.5</span> Clone 'test<sub>project</sub>' for Jane</h3>
-<div class="outline-text-3" id="text-2-5">
+<div id="outline-container-orgheadline9" class="outline-3">
+<h3 id="orgheadline9"><span class="section-number-3">3.5</span> Clone 'test<sub>project</sub>' for Jane</h3>
+<div class="outline-text-3" id="text-3-5">
 <p>
 Jane will modify the file and push to master.
 </p>
@@ -287,18 +293,18 @@ jane@vm2\) git push origin master
 </div>
 </div>
 
-<div id="outline-container-orgheadline11" class="outline-2">
-<h2 id="orgheadline11"><span class="section-number-2">3</span> Basic Git Usage</h2>
-<div class="outline-text-2" id="text-3">
+
+<div id="outline-container-orgheadline12" class="outline-2">
+<h2 id="orgheadline12"><span class="section-number-2">4</span> Basic Git Usage</h2>
+<div class="outline-text-2" id="text-4">
 <ul class="org-ul">
 <li>ref: kor: <a href="https://backlog.com/git-tutorial/kr/intro/intro1_2.html">https://backlog.com/git-tutorial/kr/intro/intro1_2.html</a></li>
 <li>ref: en: <a href="http://rogerdudler.github.io/git-guide/">http://rogerdudler.github.io/git-guide/</a></li>
 </ul>
 </div>
-
-<div id="outline-container-orgheadline10" class="outline-3">
-<h3 id="orgheadline10"><span class="section-number-3">3.1</span> Online Git Practice</h3>
-<div class="outline-text-3" id="text-3-1">
+<div id="outline-container-orgheadline11" class="outline-3">
+<h3 id="orgheadline11"><span class="section-number-3">4.1</span> Online Git Practice</h3>
+<div class="outline-text-3" id="text-4-1">
 <p>
 just follow the below sandbox, this is better than I can explain
 </p>
@@ -309,15 +315,16 @@ just follow the below sandbox, this is better than I can explain
 </div>
 </div>
 
-<div id="outline-container-orgheadline13" class="outline-2">
-<h2 id="orgheadline13"><span class="section-number-2">4</span> Git Workflow</h2>
-<div class="outline-text-2" id="text-4">
-</div><div id="outline-container-orgheadline12" class="outline-3">
-<h3 id="orgheadline12"><span class="section-number-3">4.1</span> Workflow Diagram</h3>
-<div class="outline-text-3" id="text-4-1">
+
+<div id="outline-container-orgheadline14" class="outline-2">
+<h2 id="orgheadline14"><span class="section-number-2">5</span> Git Workflow</h2>
+<div class="outline-text-2" id="text-5">
+</div><div id="outline-container-orgheadline13" class="outline-3">
+<h3 id="orgheadline13"><span class="section-number-3">5.1</span> Workflow Diagram</h3>
+<div class="outline-text-3" id="text-5-1">
 
 <div class="figure">
-<p><img src="./git-workflow.jpg" alt="git-workflow.jpg" />
+<p><img src="./git-workflow.jpg" alt="git-workflow.jpg">
 </p>
 </div>
 
@@ -335,9 +342,10 @@ just follow the below sandbox, this is better than I can explain
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline14" class="outline-2">
-<h2 id="orgheadline14"><span class="section-number-2">5</span> Conclution</h2>
-<div class="outline-text-2" id="text-5">
+
+<div id="outline-container-orgheadline15" class="outline-2">
+<h2 id="orgheadline15"><span class="section-number-2">6</span> Conclution</h2>
+<div class="outline-text-2" id="text-6">
 <p>
 Git is very useful to manage your contents not only source codes but also your own documents. 
 Also in this devops erra, knowing the git workflow makes you communicate with other organization easily.
@@ -347,9 +355,9 @@ I hope this document to be helpful.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Date: 01.23.2017</p>
-<p class="author">Author: Alex, Yongki Kim</p>
-<p class="date">Created: 2018-01-13 Sat 09:40</p>
+<p class="date">Date: 01.23.2017 01.23.2017</p>
+<p class="author">Author: Alex, Yongki Kim Alex, Yongki Kim</p>
+<p class="date">Created: 2018-01-13 Sat 10:06</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
