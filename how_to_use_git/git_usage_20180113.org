@@ -8,6 +8,9 @@
 #+HTML_DOCTYPE: <!doctype html>
 #+HTML_HEAD: <meta name="bestowed-theme" value="themes/none"><script type="text/javascript" src="../build/bestowed.min.js"></script>
 
+presentation mode: [[./git_usage_20180113.html]]
+-----
+
 This article shows you how to create simple git server and explain how to use git command.
 for example, git clone, add, commit, push. 
 most important thins is to understand the git's concept and basic terminology, if not, it's not easy to soak into git world.
