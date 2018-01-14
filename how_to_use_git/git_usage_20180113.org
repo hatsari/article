@@ -15,11 +15,6 @@
 #+LATEX_HEADER:
 # C+c C+e # default
 
-#+TITLE: Simple Git Tutorial
-#+Description: Using emacs org-mode, write git manual
-#+AUTHOR: Alex, Yongki Kim
-#+Date: 01.23.2017
-
 * Preface
 presentation mode: [[./git_usage_20180113.html][Git Usage]]
 -----
@@ -49,6 +44,14 @@ for more detailed explaination, please refer to http://www.vogella.com/tutorials
 
 ** Git Operation
 [[./git-operations.png]]
+
+* SSH Setting for Git
+remember just one thing. 
+Private is on client and public key is on server.
+** Necessary Command
+  - generating ssh key: ssh-keygen -f ~/.ssh/git.priv
+  - copy ssh public key: cat git.priv | ssh git@server "cat >> .ssh/authorized_keys" 
+  - ssh-add ~/.ssh/git.priv
 
 * Setting up private git repository
 Sometimes you should create your own git repository, but github, specially in closed network environment.
@@ -119,15 +122,12 @@ jane@vm2$ git commit -m 'new code added by jane'
 jane@vm2$ git push origin master
 #+END_SRC shell
 
-
 * Basic Git Usage
  - ref: kor: https://backlog.com/git-tutorial/kr/intro/intro1_2.html
  - ref: en: http://rogerdudler.github.io/git-guide/
 ** Online Git Practice 
 just follow the below sandbox, this is better than I can explain
   -  https://try.github.io/levels/1/challenges/1
-
-
 * Git Workflow
 ** Workflow Diagram
 [[./git-workflow.jpg]]
