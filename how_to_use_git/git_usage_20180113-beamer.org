@@ -3,22 +3,22 @@
 #+AUTHOR: Alex, Yongki Kim
 #+Date: 01.23.2017
 
-#+OPTIONS: html-link-use-abs-url:nil html-postamble:auto
-#+OPTIONS: html-preamble:t html-scripts:nil html-style:nil
-#+OPTIONS: html5-fancy:nil tex:t
-#+HTML_DOCTYPE: <!doctype html>
-#+HTML_CONTAINER: div
-#+DESCRIPTION:
-#+KEYWORDS:
-#+HTML_HEAD: <meta name="bestowed-theme" value="themes/webqem"><script async src="http://s3.amazonaws.com/cdn.robrohan.com/bestowed/bestowed.min.js"></script>
-#+CREATOR: <a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.3.1 (<a href="http://orgmode.org">Org</a> mode 8.3.4)
-#+LATEX_HEADER:
-# C+c C+e # default
 
-#+TITLE: Simple Git Tutorial
-#+Description: Using emacs org-mode, write git manual
-#+AUTHOR: Alex, Yongki Kim
-#+Date: 01.23.2017
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
+#+OPTIONS: author:t c:nil creator:nil d:(not "LOGBOOK") date:t e:t
+#+OPTIONS: email:nil f:t inline:t num:t p:nil pri:nil prop:nil stat:t
+#+OPTIONS: tags:t tasks:t tex:t timestamp:t title:t toc:t todo:t |:t
+#+LANGUAGE: en
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 25.3.1 (Org mode 8.3.4)
+#+startup: beamer
+#+LaTeX_CLASS: beamer
+#+LaTeX_CLASS_OPTIONS: [bigger]
+#+BEAMER_FRAME_LEVEL: 2
+#+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
+
+#+Ref: org,beamer,presentation, https://orgmode.org/worg/exporters/beamer/tutorial.html
 
 * Preface
 presentation mode: [[./git_usage_20180113.html][Git Usage]]
@@ -49,6 +49,14 @@ for more detailed explaination, please refer to http://www.vogella.com/tutorials
 
 ** Git Operation
 [[./git-operations.png]]
+
+* SSH Setting for Git
+remember just one thing. 
+Private is on client and public key is on server.
+** Necessary Command
+  - generating ssh key: ssh-keygen -f ~/.ssh/git.priv
+  - copy ssh public key: cat git.priv | ssh git@server "cat >> .ssh/authorized_keys" 
+  - ssh-add ~/.ssh/git.priv
 
 * Setting up private git repository
 Sometimes you should create your own git repository, but github, specially in closed network environment.
