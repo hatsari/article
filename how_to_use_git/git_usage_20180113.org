@@ -21,7 +21,7 @@ presentation mode: [[./git_usage_20180113.html][Git Usage]]
 
 This article shows you how to create simple git server and explain how to use git command.
 for example, git clone, add, commit, push. 
-most important thins is to understand the git's concept and basic terminology, if not, it's not easy to soak into git world.
+Most important thing is to understand the git's concept and basic terminology, if not, it's not easy to soak into git world.
 
 * Git Concept
 ** Basic Terminology
@@ -31,7 +31,7 @@ most important thins is to understand the git's concept and basic terminology, i
   | stage(or index) | the place to store changes in the working tree before the commit.                                                        |
   | repository      | origin: normally indicate remote repository                                                                              |
   | branch          | a named pointer to a commit, *master* is default.                                                                           |
-  |                 | master: normall your own branch                                                                                          |
+  |                 | master: normally your own branch                                                                                         |
   |                 | check out: selecting a branch                                                                                            |
   | tag             | a commit which uniquely identifies a version of the Git repository.                                                      |
   | pull request    | proposing your changes and requesting that someone review and pull in your contribution and merge them into their branch |
@@ -138,7 +138,7 @@ just follow the below sandbox, this is better than I can explain
 
 #+END_SRC shell
 
-* Conclution
+* Conclusion
 Git is very useful to manage your contents not only source codes but also your own documents. 
 Also in this devops erra, knowing the git workflow makes you communicate with other organization easily.
 I hope this document to be helpful.
