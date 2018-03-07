@@ -53,17 +53,17 @@ v3 ansible_ssh_host=172.28.128.5
       run_once: yes
 ```
 
-1. "print hostname" 작업
-  ansible_hostname 이라는 fact 변수가 정상적으로 작동하는지 확인
+### "print hostname" 작업
+ansible_hostname 이라는 fact 변수가 정상적으로 작동하는지 확인
 
-2. "gather df info" 작업
-  shell 모듈을 통해 v2, v3 호스트의 디스크 정보를 수집하고 이를 register를 이용하여 info_df 라는 변수로 저장한다. 이 작업은 shell 모듈이 아닌 다른 어떤 모듈을 사용해도 가능하며 register를 통해 변수를 저장한다는 것이 중요하다.
+### "gather df info" 작업
+shell 모듈을 통해 v2, v3 호스트의 디스크 정보를 수집하고 이를 register를 이용하여 info_df 라는 변수로 저장한다. 이 작업은 shell 모듈이 아닌 다른 어떤 모듈을 사용해도 가능하며 register를 통해 변수를 저장한다는 것이 중요하다.
 
-3. "set info_df" 작업
-  향후 다른 호스트에서도 info_df 변수를 사용할 수 있도록 set_fact 모듈을 사용한다. 
+### "set info_df" 작업
+향후 다른 호스트에서도 info_df 변수를 사용할 수 있도록 set_fact 모듈을 사용한다. 
 
-4. "create html report"
-  템플릿 모듈을 활용하여 html 파일을 생성한다. 템플릿 파일은 report.html.j2 이며 이 템플릿을 이용해서 result.html 이라는 결과 html 파일이 만들어진다.  이때 delegate_to 지시어를 사용해서 해당 작업이 localhost에서 실행되게하고, run_once 지시어를 사용하여 한 번만 작동케한다.
+### "create html report"
+템플릿 모듈을 활용하여 html 파일을 생성한다. 템플릿 파일은 report.html.j2 이며 이 템플릿을 이용해서 result.html 이라는 결과 html 파일이 만들어진다.  이때 delegate_to 지시어를 사용해서 해당 작업이 localhost에서 실행되게하고, run_once 지시어를 사용하여 한 번만 작동케한다.
 이 작업은 html 리포트 파일을 만드는 것이니 두 번 작동할 필요가 없다.
 
 ## 템플릿 파일    
@@ -97,14 +97,14 @@ ansible의 템플릿은 jinja2 형식을 가지며, 동적으로 파일을 생�
 </html>
 ```
 
-1. 제목 설정
-  {{ title }} 변수를 활용해서 제목을 지정한다. 이 변수는 gather_info.yml 플레이북에서 지정하였다.
+### 제목 설정
+{{ title }} 변수를 활용해서 제목을 지정한다. 이 변수는 gather_info.yml 플레이북에서 지정하였다.
 
-2. 테이블 헤더 표시
-  cols 변수를 loop해서 상단의 컬럼명 부분을 표시하였다. 
+### 테이블 헤더 표시
+cols 변수를 loop해서 상단의 컬럼명 부분을 표시하였다. 
 
-3. 각 서버별 정보 표시
-  ansible_play_hosts 변수는 ansible에서 제공하는 매직변수이며, 플레이에서 실행되는 모든 호스트이름을 포함하고 있다. 이 변수를 looping하여 서버별 호스트이름, CPU, Memory 그리고 shell로 설정한 변수값을 표 형식으로 출력할 수 있다.
+### 각 서버별 정보 표시
+ansible_play_hosts 변수는 ansible에서 제공하는 매직변수이며, 플레이에서 실행되는 모든 호스트이름을 포함하고 있다. 이 변수를 looping하여 서버별 호스트이름, CPU, Memory 그리고 shell로 설정한 변수값을 표 형식으로 출력할 수 있다.
 
 ## 플레이북 실행
 플레이북 실행 명령은 다음과 같다.
@@ -159,4 +159,4 @@ Title: Automated Gathered System Information
 
 ## 맺음말
 이와 같이 ansible의 템플릿을 활용해서 동적으로 HTML 파일을 만들게 되면 훨씬 가독성이 좋은 화면을 볼 수 있고, 이를 mail을 통해 전달하면 결과 내용을 좀 더 간편하게 확인할 수 있다.
-그리고 html 표의 디자인을 아름답게 만드실 수 있는 분은 공유를 부탁드립니다. 
+그리고 html 표의 디자인을 아름답게 만드실 수 있는 분은 공유를 부탁드립니다. 이쁜 표를 보여드리지 못해 죄송합니다.
