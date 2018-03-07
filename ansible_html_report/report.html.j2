@@ -1,0 +1,23 @@
+<html>
+Title: {{ title }}
+<h1>
+<br>
+<table border=1>
+<TR>
+{% for col in cols %}
+   <TD > {{ col }} </TD>
+{% endfor %}
+</TR>
+
+{% for host in ansible_play_hosts %} 
+<TR>
+   <TD> {{ hostvars[host]["ansible_hostname"] }} </TD>
+   <TD> {{ hostvars[host]["ansible_processor_cores"] }} </TD>
+   <TD> {{ hostvars[host]["ansible_memtotal_mb"] }} </TD>
+   <TD> {{ hostvars[host]["info_df"] }} </TD>
+</TR>
+{% endfor %}
+
+</table>
+
+</html>
