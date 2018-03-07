@@ -1,7 +1,5 @@
 # ansible 작업 결과를 HTML 표로 출력하는 방법
 
-![baked cake](https://blog.kintoandar.com/images/cake.jpg)
-
 ansible로 시스템 변경 작업을 많이 수행하지만, 시스템 정보를 모으기 위해 사용할 수도 있다. 이 때, HTML 포맷으로 출력하면 훨씬 보기가 좋기 때문에 Template을 사용하여 HTML 표로 수집한 값을 표현하는 방법을 설명하고자 한다.
 
 구현 방법 요약
@@ -76,8 +74,9 @@ ansible의 템플릿은 jinja2 형식을 가지며, 동적으로 파일을 생�
 ```
 <html>
 
-Title: {{ title }}
-<table>
+<h1> Title: {{ title }} </h1>
+
+<table border=1>
 <TR>
 {% for col in cols %}
    <TD class="c1"><SPAN> {{ col }} </SPAN></TD>
@@ -160,4 +159,4 @@ Title: Automated Gathered System Information
 
 ## 맺음말
 이와 같이 ansible의 템플릿을 활용해서 동적으로 HTML 파일을 만들게 되면 훨씬 가독성이 좋은 화면을 볼 수 있고, 이를 mail을 통해 전달하면 결과 내용을 좀 더 간편하게 확인할 수 있다.
-
+그리고 html 표의 디자인을 아름답게 만드실 수 있는 분은 공유를 부탁드립니다. 
