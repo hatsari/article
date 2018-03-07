@@ -1,4 +1,3 @@
-# ansible 작업 결과를 HTML 표로 출력하는 방법
 # A Way of Creating HTML Formatter to Print The Result of Ansible
 Normally, ansible is used to do system operation, but it can be useful to gather all your system information as well. At this time, if the result is a html table, it would be better to read. So I will explain how ansible makes "simple html file" using "Template".
 
