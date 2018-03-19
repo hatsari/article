@@ -88,7 +88,8 @@ in-memory inventory 방식을 사용한 예는 아래와 같다.
 ansible-playbook -i openstack.py install_packages_on_openstack_instances.yaml
 ```
 ### Package Installation
-패키지를 설치하는 방법은 패키지 관리 프로그램(rpm-based or apt-based)에 따라 달라지며, ansible에서는 다양한 패키지 설치방식을 지원하고 있다. 레드햇 계열에서는 *yum* 모듈을 사용해서 패키지를 설치하고 *service* 모듈을 사용해서 해당 서비스를 시작/중지할 수 있다.
+패키지를 설치하는 방법은 패키지 관리 프로그램(rpm-based or apt-based)에 따라 달라지며, ansible에서는 다양한 패키지 설치방식을 지원하고 있다. 레드햇 계열에서는 *yum* 모듈을 사용
+해서 패키지를 설치하고 *service* 모듈을 사용해서 해당 서비스를 시작/중지할 수 있다.
 
 #### Install Package and Start Service - sample code
 ``` yaml
@@ -102,4 +103,8 @@ ansible-playbook -i openstack.py install_packages_on_openstack_instances.yaml
     state: started
     enabled: yes
 ```
+
+## Conclusion
+이상으로 오픈스택에서 인스턴스를 생성하고 해당 인스턴스에 패키지를 설치하고 서비스를 시작하는 방법에 대해 알아보았다.
+ansible은 오픈스택 관련 모듈을 제공하기 때문에 인스턴스 생성 뿐 아니라 네트워크 설정 및 볼륨 생성까지도 쉽게 관리할 수 있음을 알게되었으며, 해당 인스턴스에서는 리눅스 OS를 관리하는 범용 모듈을 사용하여 다양한 설정 관리를 자동화할 수 있음을 볼 수 있었다. 
 
