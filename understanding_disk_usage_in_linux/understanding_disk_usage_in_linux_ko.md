@@ -8,24 +8,30 @@ original: https://ownyourbits.com/2018/05/02/understanding-disk-usage-in-linux/
 ![dutree screenshot](https://ownyourbits.com/wp-content/uploads/2018/03/dutree-featured2.png)
 
 How much space is this file taking from my hard drive? How much free space do I have? How many more files can I fit in the remaining free space?
+
 이 파일이 내 하드드라이브에서 얼마나 공간을 차지할까? 빈 공간이 얼마나 남은거지? 나머지 빈 공간에 파일을 얼마나 더 저장할 수 있을까?
 
 The answer to these questions seems obvious. We all have an instinctive understanding of how filesystems work, and we often picture storing files in disk space in the same way as physically fitting apples inside a basket.
+
 이런 질문에 대한 대답은 어찌보면 명확해 보인다. 우리는 파일시스템이 어떻게 동작하는지도 직감으로 알고 있고, 바구니에 사과를 넣는 것처럼 디스크 공간에 파일을 넣는 것으로 생각하곤 한다. 
 
 In modern Linux systems though, this intuition can be misleading. Let us see why.
+
 하지만 최신 리눅스 시스템에서 이런 직감은 틀린 것이다. 그럼 그 이유를 알아보자.
 
 ## 파일 사이즈 File size
 What is the size of a file? This one seems easy: the summation of all bytes of content from the beginning of the file until the end of the file.
+
 파일 사이즈는 무엇일까? 이건 좀 쉬워 보인다: 파일의 시작부터 끝까지 채워지는 바이트의 합.
 
 We often picture all file contents layed out one byte after another until the end of the file.
+
 보통 파일 용량은 한바이트씩 파일의 끝까지 채워가는 것으로 생각할 수 있다.
 
 ![sum of bytes](https://ownyourbits.com/wp-content/uploads/2018/05/file_usage1.png)
 
 And that’s how we commonly think about file size. We can get it with
+
 그리고 이 그림이 우리가 보통 생각하는 파일 사이즈의 모습이다. 다음 명령으로 그 값을 알 수 있다.
 
 ```shell
@@ -33,6 +39,7 @@ ls -l file.c
 ```
 
 , or the stat command that makes use of the stat() system call.
+
 , 또는 *stat()* 시스템콜을 사용하는  *stat* 명령으로도 알 수 있다. 
 
 ```shell
@@ -40,6 +47,7 @@ stat file.cs
 ```
 
 Inside the Linux kernel, the memory structure that represents the file is the inode. The metadata that we can access through the  stat  command lives in the inode
+
 리눅스 커널 내부에서, 파일을 표현하는 메모리 구조는 *inode*이다. *stat*명령을 통해 접근할 수 있는 메타데이터는 *inode*에 저장되어 있다.
 
 ```c
@@ -61,9 +69,11 @@ struct inode {
 ```
 
 We can see some familiar attributes, such as the access and modification timestamps, and also we can see  *i_size*, which is the file size as we defined earlier.
+
 여기서 몇가지 익숙한 어트리뷰트를 볼 수 있는데, access 와 modification 시간 그리고 *i_size*(글 초반에 정의했던 파일 사이즈)와 같은 것들이다.
 
 Thinking in terms of the file size is intuitive, but we are more interested in how space is actually used.
+
 파일 사이즈를 직관적으로 생각해보았지만, 여전히 실제 디스크 공간이 어떻게 사용되는가를 더 알아보도록 하겠다.
 
 ## 블록과 블록 사이즈 Blocks and block size
@@ -73,14 +83,17 @@ Regarding how the file is stored internally, the filesystem divides storage in b
 파일이 내부적으로 어떻게 저장되는가에 대해 생각해보면, 파일시스템은 스토리지를 블록(block)으로 구분한다. 전통적으로 블록 사이즈는 512 바이트였다. 하지만 최근에는 4 키로바이트로 바뀌었으며, 이 값은 MMU 하드웨어에서 지원하는 페이지 사이즈(page size)를 기반으로 결정된다.
 
 The filesystem inserts our chunked file into those blocks, and keeps track of them in the metadata.
+
 파일시스템은 이 블록들 안에 파일 조각(chunk)을 집어 넣는다. 그리고 메타데이터로 각 조각들이 어디에 저장되는가를 기록한다.
 
 This ideally looks like this
+
 그래서 이상적으로는 아래와 같은 그림이 나온다.
 
 ![ideal file chunks in blocks](https://ownyourbits.com/wp-content/uploads/2018/05/file_usage2.png)
 
 , but in practice files are constantly created, resized and destroyed, and it looks more like this
+
 , 그러나 실제 환경에서는 파일이 지속적으로 생성되고, 사이즈가 변경되고 삭제되기 때문에 실제 그림으로 나타내면 다음과 같다.
 
 ![practical file chunks in blocks](https://ownyourbits.com/wp-content/uploads/2018/05/file_usage3.png)
@@ -108,6 +121,7 @@ du file.c
 ```
 
 For example, the contents of this one byte file still use 4kiB of disk space.
+
 예를 들어, 1 바이트 파일은 4kiB의 디스크 공간을 소비한다.
 
 ```shell
@@ -140,6 +154,7 @@ Change: 2018-04-30 20:42:24.835458383 +0200
 ```
 
 We are therefore looking at two magnitudes, file size and blocks used. We tend to think in terms of the former, but we should think in terms of the latter.
+
 여기서 우리는 두가지 부분을 확인해 보았다. 사용된 파일 사이즈와 블록 사이즈. 보통 우리는 전자(사용된 파일 사이즈)를 고려하는 경향이 있지만, 실제로는 후자(사용된 블록사이즈)를 염두에 두어야 한다.
 
 ## 파일시스템별 특징 Filesystem specific features
@@ -204,6 +219,7 @@ struct ext2_inode {
 ```
 
 As files get bigger, this scheme can produce a huge overhead because we have to track thousands of blocks for a single file. Also, we have a size limitation, as the 32bit ext3 filesystem can handle to only 8TiB files using this mechanism. ext3 developers have been keeping up with the times by supporting 48 bytes, and by introducing extents.
+
 파일들이 커짐에 따라, 이 스키마는 큰 오버헤드를 만들 수 있다. 왜냐하면 하나의 파일때문에 수천개의 블록의 트래킹해야하기 때문이다. 또한 크기 제한도 있어서 이 방식으로는 32bit ext3 파일시스템에서 오직 8TiB 파일만 다룰 수 있다. 그래서 *ext3* 개발자들은 48 bytes를 지원하도록 노력해왔고 또한 *extent*도 개발하게 되었다.
 
 ```c
@@ -214,8 +230,8 @@ struct ext3_extent {
    __le32    ee_start;    /* low 32 bits of physical block */
 };
 ``` 
-
 The concept is really simple: allocate contiguous blocks in disk and just anotate where the extent starts and how big it is. This way, we can allocate big groups of blocks to a file using way less metadata, and also benefit from faster sequencial access and locality.
+
 *extent* 개념은 정말로 간단하다. 연속되는 블록을 디스크에 할당하고, *extent*가 시작하는 시점과 사이즈가 얼마나 큰지만 알려주면 된다. 이런 방식에서 큰 그룹의 블록을 훨씬 적은 메타데이터로 할당할 수 있게 되었으며, 훨씬 빨리 연속된 데이터를 접근할 수 있게 되었다.
 
 For the curious, ext4 is backwards compatible, so it supports both methods: indirect method and extents method. To see how space is allocated, we can look at a write operation. Writes don’t go straight to storage, but first they land in the file cache for performance reasons. At some point, the cache writes back the information to persistent storage.
@@ -223,6 +239,7 @@ For the curious, ext4 is backwards compatible, so it supports both methods: indi
 흥미롭게도, *ext4*는 ext3와 호환성을 가지면서 두 가지 방식을 모두 지원한다: *indirect* 방식과 *extent* 방식. 디스크 공간이 어떻게 할당되는가를 알아보기 위해, *쓰기 방식(write operation)*을 알아 보겠다. *쓰기(write)*는 디스크 스토리지에 바로 쓰여지지 않는다. 성능을 높이기 위해 파일 캐시에 먼저 저장되고, 특정 시점에 캐시가 스토리지에 기록되는 방식이다.
 
 The filesystem cache is represented by the struct address_space, and the writepages operation will be called on it. The sequence looks like this
+
 파일시스템 캐시는 *address_space* 구조체로 표현되고, *writepages* 기능이 이를 호출한다. 그 순서는 다음과 같다.
 
 ```c
