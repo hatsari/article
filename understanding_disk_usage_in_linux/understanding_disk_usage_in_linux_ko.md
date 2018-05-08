@@ -251,3 +251,216 @@ The filesystem cache is represented by the struct address_space, and the writepa
 그리고 어느 순간에 *ext4_map_blocks()* 가 ext4_ext_map_blocks() 또는 ext4_ind_map_blocks()를 호출할 것이다. 이는 *extent*를 사용하냐 또는 사용하지 않느냐에 따라 달라진다. *extents.c*의 앞부분을 보면, 다음 장에서 다룰 *구멍(holes)* 개념이 참조됨을 알아차릴 수 있을 것이다.
 
 ### 체크섬 Checksums
+The latest generation of filesystems also store checksums for the data blocks, in order to fight against silent data corruption. This gives them the ability to detect and correct these random errors, and of course this also comes with a toll in terms of disk usage proportional to the file size.
+
+가장 최신의 파일시스템들은 또한 데이터 블록에 대한 체크섬도 저장한다. 이를 활용해서 silent data corruption(시간이 지남에 따라 데이터가 손실되어 가는 것)을 막을 수 있다. 또한 간헐적으로 발생하는 에러도 찾아내어 고쳐준다. 파일 사이즈에 비례한 디스크 사용 측면에도 영향을 끼친다.
+
+Only more modern systems such as BTRFS and ZFS support data checksums, but some older ones like ext4 have included metadata checksums.
+
+BTRFS나 ZFS와 같은 파일시스템들이 데이터 체크섬을 지원하고, ext4와 같은 오래된 파일스스템은 메타데이터 체크섬만을 지원한다.
+
+### 저널 The journal
+ext3 added journaling capabilities to ext2. The journal is a circular log that records transactions in process in order to provide enhanced resiliance against power failures. By default it only applies to metadata, but it can be enabled as well for the data with the  data=journal  option at some performance cost.
+
+*ext3*는 *ext2*에 저널(journal)기능을 추가한 것이다. 저널은 컴퓨터 파워 이슈로 인해 문제가 발생할 때, 이에 대한 데이터 안정성을 보장하기 위해 데이터가 기록될 때의 트랜젝션을 로그로 기록(순환 기록)하는 기능이다. 기본적으로 메타데이터만 기록하나, *data=journal* 옵션을 주면 데이터 트랜잭션 로그도 기록할 수 있다. 단 이 때 성능은 저하된다.
+
+This is a special hidden file, normally at inode number 8 that has a typical size of 128MiB, as the official documentation explains
+
+이 로그는 특별하고 숨겨진 파일이라서 inode 8에 위치하며, 사이즈는 128MiB 이고 공식 문서 이 내용들이 설명되어 있다.
+
+> Introduced in ext3, the ext4 filesystem employs a journal to protect the filesystem against corruption in the case of a system crash. A small continuous region of disk 
+> (default 128MiB) is reserved inside the filesystem as a place to land “important” data writes on-disk as quickly as possible. Once the important data transaction is fully written to > the disk and flushed from the disk write cache, a record of the data being committed is also written to the journal. At some later point in time, the journal code writes the t> ransactions to their final locations on disk (this could involve a lot of seeking or a lot of small read-write-erases) before erasing the commit record. Should the system cras> h during the second slow write, the journal can be replayed all the way to the latest commit record, guaranteeing the atomicity of whatever gets written through the journal to> the disk. The effect of this is to guarantee that the filesystem does not become stuck midway through a metadata update.
+
+> *ext3*에서 소개되었던 저널이 *ext4*에도 채용되어 시스템이 망가질 경우 발생할 수 있는 데이터 손상을 방지할 수 있다. 디스크의 연속된 일부 영역이(기본 128MiB) 파일시스템에
+> 예약되어 중요한 메타데이터를 가능한 빨리 기록되게 한다. 중요한 데이터 트랜잭션이 완전히 쓰기를 종료하면, 쓰기 캐시를 비우고, 완료된 데이터 로그를 저널에 기록한다. 이 후, 
+> 저널 코드는 디스크의 최종 영역에 트랜잭션 로그를 기록한다(이 작업은 많은 찾기 작업과 대량의 작은파일 읽기-쓰기-삭제 작업을 발생시킬 수 있다). 그 다음 완료 로그를 삭제한다.
+> 이 후 쓰기 작업 도중 시스템 장애가 발생하면, 저널은 최종 완료(커밋) 기록을 재수행하여 저널을 통해 디스크에 기록된 데이터의 정합성을 보장하게 된다. 이에 따라 메타데이터 에러로 
+> 인해 파일시스템이 손상되는 이슈를 방지할 수 있다.
+
+### 테일 패킹 Tail packing
+Also known as block suballocation, filesystems with this feature will make use of the tail space at the end of the last block, and share it between different files, effectively packing the tails in a single block.
+
+이는 *block suballocation* 이라고도 불리며, 이 기능이 있는 파일시스템은 마지막 블록의 끝 부분을 사용하고, 다른 파일들과 공유할 수 있어 효율적 디스크 블록을 사용할 수 있다. 
+
+![tail packing](https://ownyourbits.com/wp-content/uploads/2018/05/file_usage4.png)
+
+While this is a nice feature to have that will save us a lot of space specially if we have a big number of small files (as explained above), we can see that it makes existing tools inaccurate to report disk usage. We cannot just add all used blocks of all our files to obtain real disk usage.
+
+위에 설명한 것처럼, 작은 파일이 많은 경우에는 이 기능을 활용하면 많은 데이터 공간을 확보할 수 있기 때문에 매우 효율적이다. 하지만 이 때문에 모니터링툴이 잘못된 디스크 사용 정보를 출력할 수도 있다. 그렇다고 사용중인 모든 블록을 계산해서 실제 디스크 사용량을 보여줄 수도 없다.
+
+Only BTRFS and ReiserFS support this feature.
+
+이 기능은 오직 BTRFS와 ReiserFS만 지원한다.
+
+### 스파스 파일 Sparse files
+* 참고: Sparse file: 일반 파일은 파일 내부가 모두 데이터로 채워지나, 스파스 파일은 빈 공간으로 일정 용량의 파일사이즈 공간을 점유할 수 있다. VM 이미지 파일이 대표적이\
+다.
+----
+
+Most modern filesystems have supported sparse files for a while. Sparse files can have holes in them that are not actually allocated to them and therefore don’t occupy any space. This time, the file size will be bigger than the block usage.
+
+최신 파일시스템들은 스파스 파일을 지원해왔다. 스파스 파일은 파일 안쪽에 빈 공간을 만들 수 있어서 실제 디스크 공간을 차지하고도 파일 사이즈를 점유할 수 있다. 이 때 파일 사이즈는 블록 사용량 보다 크게 된다.
+
+![sparse file](https://ownyourbits.com/wp-content/uploads/2018/04/495px-Sparse_file_en.svg_.png)
+
+This can be really useful for things like generate “big” files really fast, or to provide free space for our VM virtual hard drive on demand. For the first time, weird things can happen such as end up running out of space in the host while we are using our hard drive in the virtual machine.
+
+이 기능은 진짜 *큰* 파일을 빨리 만들 때 유용하다. 또는 VM 가상 디스크에 추가 공간을 제공할 수도 있다. 
+
+In order to slowly create a 10GiB file that uses around 10GiB of disk space we can do
+
+10GiB 파일을 만들 때, 10GiB의 디스크 공간을 채우면서 시간이 오래 걸리는 방법은 아래와 같다.
+
+```shell
+$ dd if=/dev/zero of=file bs=2M count=5120$
+```
+
+In order to create the same big file instantly we can just write the last byte, or even just
+
+동일한 사이즈의 큰 파일을 바로 생성시키는 방법은 아래와 같다.
+
+```shell
+$ dd of=file-sparse bs=2M seek=5120 count=0
+```
+
+또는 *truncate* 명령을 사용할 수도 있다.
+
+```shell
+$ truncate -s 10G
+```
+
+We can modify disk space allocated to a file with the fallocate command that uses the fallocate() system call. With this syscall we can do more advanced things such as
+
+*fallocate()* 시스템콜을 사용하는 *fallocate* 명령어를 사용해서 파일에 할당되어 있는 디스크 공간을 수정할 수도 있다. 이 시스템콜을 이용하여 다음과 같은 고급 작업도 가능하다.
+
+Preallocate space for the file inserting zeroes. This will increase both disk usage and file size.
+Deallocate space. This will dig a hole in the file, thus making it sparse and reducing disk usage without affecting file size.
+Collapse space, making the file size and usage smaller.
+Increase file space, by inserting a hole at the end. This increases file size without affecting disk usage.
+Zero holes. This will make the wholes into unwritten extents so that reads will produce zeroes without affecting space or usage.
+
+  - *zero* 로 채워진 파일 미리 할당하기. 파일 사용량과 디스크 사용량 모두 증가.
+  - 공간 반환하기. 파일에 빈 공간을 만들어 파일 사이즈는 유지하며 디스크 사용량만 줄이기.
+  - 공간 압축. 파일사이즈와 디스크 사용량 모두 줄이기.
+  - 파일 끝에 빈 공간을 추가하야 파일 공간 증가. 디스크 사용량은 유지하며 파일 사이즈만 증대.
+  - Zero holes. 파일 전체를 쓰여지지 않은 extent 상태로 만들어 파일 공간이나 사용량을 유지하며 *zero*를 추가.
+  
+For instance, we can dig holes in a file, thus making it sparse in place with
+
+예를 들어, 다음 명령으로 파일에 공간을 만들어 *sparse*로 활용할 수 있다.
+
+```shell
+$ fallocate -d file
+```
+
+The cp command supports working with sparse files. It tries to detect if the source file is sparse by some simple heuristics and then it makes the destination file sparse as well. We can copy a non-sparse file into a sparse copy with
+
+*cp* 명령은 *sparse* 파일을 지원한다. 즉, 간단한 측정 방법으로 소스 파일이 *sparse* 파일인지를 검사한 후, 맞으면 대상 파일도 *sparse* 파일로 만든다. 또한 *non-sparse* 파일도 *sparse* 파일로 복제할 수 있다.
+
+```shell
+$ cp --sparse=always file file_sparse
+```
+
+반대로 *sparse* 파일을 *non-sparse* 파일로 복제할 수도 있다.
+
+```shell
+$ cp --sparse=never file_sparse file$
+```
+
+If you are convinced that you like working with sparse files, you can add this alias to your terminal environment
+
+지금 다루고 있는 파일들이 *sparse* 파일이라고 확신한다면, 터미널 환경에 다음과 같이 *alias* 를 추가할 수도 있다.
+
+```shell
+cat ~/.bashrc
+alias cp='cp --sparse=always'
+```
+
+When processes read bytes in the hole sections the filesystem will provide zeroed pages to them. For instance, we can analyze what happens when the file cache reads from the filesystem in a hole region in ext4. In this case, the sequence in readpage.c looks something like this
+
+프로세스가 빈 공간의 바이트를 읽게 될때, 파일시스템은 *zero* 페이지를 알려준다. 예를 들어, 파일 캐시가 ext4 파일시스템의 빈 공간(hole)을 읽을 때,*readpage.c* 의 순서는 다음과 같다.
+
+```c
+(cache read miss) ext4_aops-> ext4_readpages() -> ... -> zero_user_segment()
+```	
+
+After this, the memory segment that the process is trying to access through the  read()  system call will efficiently obtain zeroes straight from fast memory.
+
+이 후, *read()* 시스템콜을 통해 접근하려는 프로세스는 효율적으로 메모리에서 *zero* 페이지를 읽어갈 수 있다.
+
+### COW 파일시스템 COW filesystems
+The next generation of filesystems after the ext family brings some very interesting features. Probably the most game changing feature from filesystems like ZFS or BTRFS is their COW or copy-on-write abilities.
+
+ext 패미리 다음 세대의 파일시스템들은 몇가지 매우 흥미로운 기능을 지니고 있다. 이 중 ZFS나 BTRFS 같은 파일시스템이 제공하는 가장 흥미로운 기능은 *COW* 또는 *copy-on-write* 기능일 것이다.
+
+When we perform a copy-on-write operation, or a clone, or a reflink or a shallow copy we are really not duplicanting extents. We are just making a metadata annotation in the newly created file, where we reference the same extents from the original file in the new file and we tag the extent as shared. The userspace is now under the illusion that there are two distinct files that can be modified separatedly. Whenever a process wants to write in a shared extent, the kernel will first create a copy of the extent and annotate it as belonging exclusively to that file, at least for now. After this, both files are a bit more different from one another, but they can still share many extents. In other words, in a COW filesystem extents can be shared between files and the filesystem will be in charge of only creating new extents whenever it is necessary.
+
+*copy-on-write* 기능이 수행되거나, 클론(clone)을 하거나, 참조링크(reflink) 또는 *shallo copy* 을 실행하면, 파일 *extent*를 실제로 복제하는 것이 아니다. 이 때는 단순히 새로 생성된 파일의 메타데이터 선언만 만드는 것이다. 즉, 원본 파일의 같은 데이터를 새로운 파일이 참조할 수 있도록 지정하고 해당 데이터가 공유되고 있다는 것을 알리는 태그(tag)를 붙이는 것이다. 하지만 사용자 입장에서는 두 개의 별도의 파일이 각각 별도로 수정될 수 있고 느낄 수 있다. 프로세스가 공유 데이터에 쓰기 작업을 할 때마다, 커널은 먼저 데이터의 복제본을 만들고 그 복제본이 해당 파일에 종속되었음을 알려준다, 적어도 지금까지는 말이다. 이제 두 파일은 서로 약간 달라지게 되었으나 여전히 많은 데이터를 공유하고 있다. 다르게 말하면, COW 파일시스템의 데이터(extent)는 파일간에 공유될 수 있으며, 파일시스템은 필요할 때마다 새로운 데이터만 추가할 수 있게 되었다.
+
+![cow_image](https://ownyourbits.com/wp-content/uploads/2018/05/shared_extent1-768x539.png)
+
+We can see that cloning is a very fast operation, that doesn’t require doubling the space that we use like a regular copy. This is really powerful, and it is the technology behind the instant snapshot abilities of BTRFS and ZFS. You can literally clone ( or take a snapshot ) of you whole root filesystem in under a second. This is useful for instance right before upgrading your packages in case something breaks.
+
+이제 복제(cloning) 작업이 매우 빠르게 수행되는 것을 볼 수 있는데 그 이유는 일반 파일을 복사할 때처럼 해당 공간을 두 배로 소모할 필요가 없기 때문이다. 이 기능은 정말 강력하고, 이 기능을 통해 BTRFS나 ZFS에서 스냅샷을 즉시 만들어내는 방식의 기반 기술이 된다. 그래서 수초만에 root 파일시스템 전체의 복제 또는 스냅샷을 찍을 수 있다. 이를 활용해서 장애 예방으로 시스템 업그레이드 전에 복제를 뜰 수 있다.
+
+BTRFS supports two ways of creating shallow copies. The first one applies to subvolumes and uses the btrfs subvolume snapshot  command. The second one applies to individual files and uses the cp --reflink  command. You can find this alias useful to make fast shallow copies by default.
+
+BTRFS 는 두 가지 방식의 *shallow copy*(참조 복제)를 지원한다. 첫번째는 *subvolumes*를 활용하기 위해 `btrfs subvolume snapshot` 명령을 사용하는 것이다. 두번째는 각각의 파일에 적용하기기 위해 `copy --reflink` 명령을 사용하는 것이다.
+
+
+```shell
+cat ~/.bashrc
+cp='cp --reflink=auto --sparse=always'
+```
+
+Going one step further, if we have non shallow copies or a file, or even files with duplicated extents, we can deduplicate them to make them reflink those common extents and free up space. One tool that can be used for this is duperemove but beware that this will naturally lead to a higher file fragmentation.
+
+한 단계 더 나아가, *shallow copy* 또는 파일 또는 중복된 데이터(extent)를 가진 파일이 없더라도, 그 파일들을 중복제거할 수 있다. 이 때는 공통의 데이터(extent)를 참조링크(reflink)로 만들고 디스크 공간을 절약할 수 있다. 이 작업을 할 수 있게 해주는 툴이 *deperemove* 이다. 하지만 이 방법은 파일을 더 많이 분할시킬 수 밖에 없다는 것을 명심해야 한다.
+
+Now things really start getting complicated if we are trying to discover how our disk is being used by our files. Tools such as  du  or dutree will just count used blocks without being aware that some of them might be shared so will report more space than what is really being used.
+
+이제 우리 파일이 디스크를 어떻게 점유하게 되는가를 알아내는게 점점 더 복잡해지게 되었다. *du* 또는 *dutree* 같은 명령어는 단순히 사용되는 블록수를 세기만 하고 다른 파일과 공유되는 것은 인식하지 못하여 실제로 더 쓸 수 있는 공간이 있음에도 불구하고 그 공간은 알려주지 못한다.
+
+Similarly, in BTRFS we should avoid using the df  command as it will report space that is allocated by the BTRFS filesystem as free, so it is better to use btrfs filesystem usage.
+
+같은 이유로, BTRFS에서 `df` 명령의 사용을 피해야 한다. 이 명령이 BTRFS 파일시스템이 점유하는 공간을 비어있는 공간으로 잘못 알려줄 것이기 때문이다. 그러므로 파일시스템 사용량을 보기 위해서는 `btrfs filesystem usage` 명령을 사용할 것을 권고한다.
+
+```shell
+$ sudo btrfs filesystem usage /media/disk1
+Overall:
+    Device size:                   2.64TiB
+    Device allocated:              1.34TiB
+    Device unallocated:            1.29TiB
+    Device missing:                  0.00B
+    Used:                          1.27TiB
+    Free (estimated):              1.36TiB      (min: 731.10GiB)
+    Data ratio:                       1.00
+    Metadata ratio:                   2.00
+    Global reserve:              512.00MiB      (used: 0.00B)
+ 
+Data,single: Size:1.33TiB, Used:1.26TiB
+   /dev/sdb2       1.33TiB
+ 
+Metadata,DUP: Size:6.00GiB, Used:3.48GiB
+   /dev/sdb2      12.00GiB
+ 
+System,DUP: Size:8.00MiB, Used:192.00KiB
+   /dev/sdb2      16.00MiB
+ 
+Unallocated:
+   /dev/sdb2       1.29TiB
+```
+
+Sadly, I don’t know of any simple way of tracking disk usage of single files in COW filesystems. At the subvolume level we can get a rough idea from tools such as btrfs-du of what amount of data is exclusive to a snapshot and what is shared between snapshots.
+
+불행히도, COW 파일시스템에서 간단하게 각 파일의 디스크 점유량을 추적하는 방법을 알지 못한다. 대신 *subvolume* 레벨에서 `btrfs-du`와 같은 명령어로 독립된 데이터의 용량과 스냅샷 간에 공유되는 용량의 값을 추측할 수 있다.
+
+## 참고 References
+
+https://en.wikipedia.org/wiki/Comparison_of_file_systems
+
+https://lwn.net/Articles/187321/
+
+https://ext4.wiki.kernel.org/index.php/Main_Page
+
+
