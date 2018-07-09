@@ -3,13 +3,13 @@ Date: 2018. 07. 09
 
 When you create instances on openstack, you can use ansible, though its instance creation are serial, not parallel, one by one. So I made these playbook code which is creating several instances simutaeoulsy and verifing the creation. These codes provide below functions.
 
-  - Spawning Instances Simutaneously
+  - Spawning Instances simultaneously
   - Verifing Creation of Instances
   - Checking Enablement of SSH port
 
 Detailed code and description is here
 
-## Spawning Instances Simutaneously
+## Spawning Instances Simultaneously
 Basically ansible creates instances one by one. Even though working in the **loop**, instance is generated in serial. so to reduce the creation time of instances, we have to use **async** directive. Look at below codes. **async: 120** and **poll: 0** is the right part to spawn all instances same time. especially focus on **poll: 0**, this means the task don't verify whether instances create successfully or not. Just run and don't care about it.
 
 ```yaml
@@ -78,5 +78,5 @@ Last job is to check the ssh port. We have to use ssh connection to modify the i
 ```
 In this code, **inventory_hostname** means **localhost**, so **localhost** try to connect to instances. I quoted this code from **ansible_doc wait_for**.
 ## Conclusion
-On OpenStack or AWS or AZURE or GCP and any other cloud or virtualization environment, if you want to use ansible to create instances, it would be better to use **async**, **async_status** and **wait_for**. With these directives, you can create instances simutaneously and you can reduce much wasting-time.
+On OpenStack or AWS or AZURE or GCP and any other cloud or virtualization environment, if you want to use ansible to create instances, it would be better to use **async**, **async_status** and **wait_for**. With these directives, you can create instances simultaneously and you can reduce much wasting-time.
 Have good IAC time.
