@@ -8,7 +8,7 @@ Date: 2018. 07. 09
 
 위 기능에 대한 구현 코드는 아래에 자세히 설명토록 하겠습니다.
 
-## Spawning Instances Simutaneously
+## Spawning Instances Simultaneously
 ansible은 기본적으로 instance를 생성할 때 하나씩 생성하게 합니다. loop를 돌리더라도 결국 하나씩 차례로 생성됩니다. 이에 대해 시간을 절약하기 위해서는 동시에 인스턴스를 생성하는 방법을 사용해야하며 플레이북에서는 **async** 방식을 활용할 수 있습니다. 아래 코드에서 **async: 120**와 **poll: 0** 설정이 동시에 인스턴스를 생성할 수 있는 부분입니다. 120초 동안 async를 진행하고 진행여부에 대해서는 확인하지 않도록 **poll** 부분은 0 으로 설정하였습니다. 
 
 ```yaml
