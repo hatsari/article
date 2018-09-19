@@ -99,8 +99,10 @@ playbook name: copy_multi_file.yml
         dest: dest_file3
   tasks:
     - name: print each file ans src and dest
-      debug:
-        msg: "{{ item.file}} is copied from {{ item.src }} to {{ item.dest }}"
+      copy:
+        name: "{{ item.file }}"
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
       with_items:
         - "{{ target1 }}"
         - "{{ target2 }}"
