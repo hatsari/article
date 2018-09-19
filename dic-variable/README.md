@@ -16,6 +16,7 @@ vars:
 
 Sometimes we have to put many variable in one variable to access it easily. For example, when copying file from different source to different destinaton, how will you deal withit?
 without headache, you can make playbook with seperated task.
+
 ```
 tasks:
   - name: copy file1 to src_file_dir1 to dest_file_dir1
@@ -36,6 +37,7 @@ tasks:
 ```
 
 이와 같은 방식은 동일한 task가 세 번이나 사용되기 때문에 보기 좋치 않다. 3번은 그렇다쳐도 5번 이상 넘어가면 쓸데없이 길어지는 문제가 있다.
+
 same tasks duplicates 3 times. it works absolutely but not good to see, not good to maintain.
 
 ## Dictionary Variable
@@ -74,6 +76,7 @@ playbook name: debug_variable.yml
 
 ## Practical Code
 실제 파일을 복제하는 플레이북 코드는 아래와 같다.
+
 Below is the real code to copy multi files from different each source to different each destination.
 
 playbook name: copy_multi_file.yml
@@ -106,4 +109,5 @@ playbook name: copy_multi_file.yml
 
 ## Conclusion
 모든 프로그래밍 언어가 그렇듯이 변수를 잘 다루면 작업이 엄청 편해진다. 
+
 As like any other programming language, much more knowledge about variable makes you easy to work.
