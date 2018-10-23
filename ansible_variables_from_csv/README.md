@@ -2,7 +2,7 @@
 Customer requested me to import variables from csv file in ansible playbook. \\
 using csvfile module and with_lines, I solved the problem.
 
-# sample csv file
+## sample csv file
 Below is sample csv format for test. \\
 File name: csv.txt
 ``` 
@@ -32,7 +32,7 @@ File name: get_fact.yaml
         var: key1
 ```
 
-# Execute playbook
+## Execute playbook
 ``` sh
 ansible-playbook get_fact.yaml -v
 
@@ -57,5 +57,5 @@ PLAY RECAP *********************************************************************
 localhost                  : ok=3    changed=0    unreachable=0    failed=0
 ```
 
-# Conclusion
+## Conclusion
 You can set many number of variables now!!
