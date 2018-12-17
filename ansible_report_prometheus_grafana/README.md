@@ -50,7 +50,7 @@ prometheus.yml 플레이북은 다른 분이 작성한 내용을 일부 수정�
 ### Data Flow
 ansible task -> pushgateway -> prometheus -> grafana
 
-![prometheus_data_flow](https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&ved=2ahUKEwjl-NDcpKbfAhUS26QKHcX7DIsQjRx6BAgBEAU&url=https%3A%2F%2Fsysdig.com%2Fblog%2Fkubernetes-monitoring-with-prometheus-alertmanager-grafana-pushgateway-part-2%2F&psig=AOvVaw02j3xoB0yu_QO9NtWx8mgO&ust=1545116222401568)
+![prometheus_data_flow](https://478h5m1yrfsa3bbe262u7muv-wpengine.netdna-ssl.com/wp-content/uploads/2018/08/kubernetes_prom_diagram2.png)
 
 설정 순서는 다음과 같다.
 - grafana 접속 및 정상여부 확인
