@@ -1,0 +1,25 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "rhel7"
+  config.vm.hostname = "prometheus"
+  config.vm.network "private_network", ip: "172.28.128.3"
+#  config.vm.network "private_network", type: "dhcp"
+#  config.vm.provider "virtualbox"
+#  config.vm.define "v1" do |v1|
+#    v1.vm.box = "ansible/tower"
+#  end
+#  config.vm.define "v2" do |v2|
+#    v2.vm.box = "rhel7"
+#  end
+#  config.vm.define "v3" do |v3|
+#    v3.vm.box = "rhel7"
+#  end
+
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "provision/prometheus.yml"
+    ansible.inventory_path = "provision/inventory"
+    ansible.limit = "all"
+    ansible.verbose = "vv"
+    ansible.become= "yes"
+  end
+end
+
