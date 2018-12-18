@@ -122,37 +122,172 @@ node-exporter는 각 모니터링 대상 서버에 설치되어 필요한 정보
 6. 입력한 대시보드 확인: 대시보드에서 *Host Stats - Prometheus Node Exporter 0.17.0*를 선택하면 아래와 같은 화면을 볼 수 있다.
 ![grafana-hoststats](images/host-stats.png)
 
+- node_exporter 참고문서: https://prometheus.io/docs/guides/node-exporter/
+
 ### pushgateway configuration
 pushgateway는 모니터링 대상 서버에서 prometheus로 데이터를 *PUSH*할 수 있도록 해주는 서비스이다. 위에서 설명한 바와 같이 prometheus는 *PULL* 방식으로 데이터를 직접 가져오도록 작동하기 때문에 *PUSH*를 위해서는 별도의 서비스가 필요하며, 이 기능을 하는 것이 *pushgateway* 이다.
 
+모니터링 대상 서버의 데이터를 pushgateway로 보내기 위해서 다양한 client를 이용할 수 도 있지만, 이번에는 ansible을 가지고 데이터를 추출한 후 이를 pushgateway로 보내도록 하겠다. 이를 위해 아래와 같이 간단한 플레이북을 만들고 다음의 정보를 *PUSH* 하고자 한다.
+
+전달 데이타
+- ansible_cpu_size: ansible의 facts 정보를 이용해 서버의 core 개수를 전달
+- ansible_memory_size: ansible의 facts 정보를 이용해 서버의 메모리 전체 용량 전달
+- ansible_freememory_size: ansible의 facts 정보를 이용해 서버의 여유 메모리 용량 전달
+- ansible_thread_grafana_count: shell 모듈을 이용해 grafana가 사용하는 threads 개수를 알아낸 후 데이터로 전달
+
+위 데이터의 값은 ansible 플레이북에서 추출한 후, shell 모듈을 통해 curl로 전달하도록 하였다. 원래는 uri 모듈로 작성코자 하였으나 실패하였고, 멱득성을 가지지 않고, 매번 실행하기 위해서도 shell 모듈이 좋을 것 같아 그대로 사용하였다.(물론! 핑계다..) 
+
+하지만 여기선 사용한 shell 모듈은 template을 그대로 사용할 수 있기 때문에 변수를 전달할 때 매우 유용한 방식이다.
+
+- pushgateway 참고문서: https://github.com/prometheus/pushgateway
 
 #### ansible playbook to gather information
+아래 push-event.yaml 플레이북은 서버에서 데이터를 가져오는 기능을 한다. 여기서 push_data.j2 를 가공하여 pushgateway로 데이터를 전송한다.
+
+``` cat push-event.yaml ```
+
+```yaml
+---
+- name: push event to prometheus
+  hosts: localhost
+  connection: local
+  tasks:
+	  #  - name: push cpu
+	  #    uri:
+	  #      url: "http://localhost:9091/metrics/job/cpu_num"
+	  #      method: POST
+	  ##      body_format: form-urlencoded
+	  #      body_format: json
+	  #      validate_certs: no
+	  #      body: { sample_metric: 5 }
+	  #    register: token_output
+	  #    ignore_errors: yes
+	  
+	  #  - name: push hardware metric
+	  #    shell: echo "cpu_num 100 mem_num 1000 | curl --data-binary @- http://localhost:9091/metrics/job/pushgateway/instance/localhost:9091"
+	  #    shell: |
+	  #      cat <<EOF | curl --data-binary @- http://localhost:9091/metrics/job/ansible_metric/instance/localhost:9091
+	  #      ansible_cpu_size 100 \
+	  #      ansible_memory_size 1000 \
+	  #      EOF
+	  
+  - name: calculate thread count
+    shell: ps -eL | grep grafana | wc -l
+    register: thread_grafana_count
+
+  - name: push system information
+    shell: "{{ lookup('template', 'push_data.j2') }}"
+    args:
+      executable: /bin/bash
+							
+  - name: print values
+    debug:
+      var:  thread_grafana_count
+```
+
 #### send metric to prometheus
+push_data.j2 파일은 쉘스크립트에서 변수를 사용토록 하는 jinja template이며, 여기서는 curl 명령을 호출한다.
+``` cat push_data.j2 ```
+
+```sh
+cat <<EOF | curl --data-binary @- http://localhost:9091/metrics/job/ansible_metric/instance/localhost:9091
+## TYPE ansible_ip_address summary
+#ansible_hostname {{ ansible_hostname }}
+# TYPE ansible_cpu_size counter
+ansible_cpu_size {{ ansible_processor_cores }}
+# TYPE ansible_memory_size gauge
+ansible_memory_size {{ ansible_memtotal_mb }}
+# TYPE ansible_freememory_size gauge
+ansible_freememory_size {{ ansible_memfree_mb }}
+# TYPE ansible_thread_grafana_count gauge
+ansible_thread_grafana_count {{ thread_grafana_count.stdout }}
+EOF
+```
+* 데이터를 전달할 때, 숫자의 전송은 잘되지만 문자열의 전송은 되지 않았다. 이 부분은 추가 확인이 필요함.
+
 ### prometheus - check if metric is stored
+prometheus에서 pushgateway를 통해 데이터를 가져오도록 설정하기 위해서는 prometheus.yml 설정 파일에 기록해 줘야 한다.
+가장 마지막의 *job_name: ansible_metric* 부분이 pushgateway를 활성화하는 부분이다.
+ 
+```shell
+[root@prometheus ansible]# cat /home/prometheus/prometheus-2.5.0.linux-amd64/prometheus.yml
+scrape_configs:
+
+  - job_name: 'prometheus'
+    scrape_interval: 1s
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'node_exporter'
+    scrape_interval: 1s
+    static_configs:
+      - targets: ['localhost:9100']
+
+  - job_name: 'ansible_metric'
+    scrape_interval: 1s
+    honor_labels: true
+    static_configs:
+      - targets: ['localhost:9091']
+```
+
+#### connecting prometheus dashboard
+prometheus도 기본적인 웹 접속콘솔을 제공하며, 이를 통해 전달한 데이터가 정상적으로 수집되었는지 확인할 수 있다.
+- prometheus web url: http://172.28.128.3:9090
+- *insert metric at cursor* 을 눌러 우리가 지정한 ansible_cpu_size 같은 metric 들이 정상적으로 들어왔는지 확인할 수 있다. *execute*를 눌러 값을 확인하고 *graph*탭을 눌러 표 형식으로 나오는 것도 확인해볼 수 있다.
+
+[prometheus-web](images/prometheus-web.png)
+***
+[prometheus-job](images/prometheus-job.png)
+***
+
+## ansible report dashboard in grafana
+이렇게 정상적으로 prometheus 에 값이 저장된 것을 확인하였다면, 이제 grafana의 대시보드에 표현해보도록 하겠다.
+
+기존에 만든 *host stats* 대시보드에 *grafana 쓰레드* single stat과 *cpu 개수*와 *memory 용량*을 위한 테이블을 만들어 보도록 하겠다.
+
+### SingleStat Panel for threads
+1. grafana에서 *host stats* 대시 보드 접속(http://172.28.128.3:3000/d/Czz-xPBmz/host-stats-prometheus-node-exporter-0-17-0)
+2. 화면 중앙 상단의 "add panel" 을 선택
+![add-panel](images/grafana-add-panel.png)
+3. *SingleStat* -> *Panel Title* 선택 -> *Edit* 선택
+4. *Metrics* 탭에 우리가 전송한 *ansible_thread_grafana_count*메트릭을 입력
+5. *Options* 탭에서 Guage 부분의 *show* 를 체크
+![grafana-thread](images/grafana-thread.png)
+
+### Table Panel for cpu and memory
+1. grafana에서 *host stats* 대시보드 접속(http://172.28.128.3:3000/d/Czz-xPBmz/host-stats-prometheus-node-exporter-0-17-0)
+2. 화면 중앙 상단의 "add panel" 을 선택
+![add-panel](images/grafana-add-panel.png)
+3. *Table*-> *Panel Title* 선택 -> *Edit* 선택
+4. *Metric* 탭에서 우리가 전송한 *ansible_cpu_size*, *ansible_memory_size* 그리고 *ansible_freememory_size* 메트릭을 입력하고 *instant* 항목 체크
+5. 상단의 화명에 데이블이 정상적으로 출력되는지 확인 
+![grafana table](images/grafana-table.png)
+우측 상단의 *되돌아가기* 버튼을 누르면 아래 화면과 같은 대시보드가 완성된다.
+
+## Final Dashboard
+이제 완성된 대시보드를 보도록 하자. 
+![final dashboard](images/final-dashboard.png)
+
+## Conclusion
+이상으로 ansible 플레이북의 결과 화면을 대시보드로 표현하는 방법에 대해 알아보았다. 최근 유행한다는 prometheus와 grafana를 사용해서 표현해보았으나 아직 이 두 솔루션에 익숙치 않아 결과화면이 별로 이쁘지는 않다. 그리고 이런 방법은 SMS 솔루션을 사용하면 굳이 만들 필요도 없다는 생각을 해본다. 하지만 ansible을 가지고 모니터링 솔루션과 연동할 때 이런 방법을 쓸 수 있다는 점을 알게 되었고 또 누군가는 이런 방식을 원할 수도 있을 거라 생각해본다. 이 글이 도움이 되었기를 바라며, 아직 미진한 부분은 아래 Todo 목록으로 기록해 놓았으니 이에 대한 해결 방식을 아시는 분은 hatsari@gmail.com 또는 facebook ansible 유저그룹(https://www.facebook.com/groups/ansiblekoreausergroup)으로 알려주시면 고맙겠습니다.
 
 ## Todo more
-### ansible uri tasks
-### grafana values
-### 
-
-
-## prometheus knowledge
-- presenter: http://172.28.128.3:9090
-### node-exporter
-node_exporter is aimed to gather host information and send it to prometheus.
-- systemctl status node_exporter
-- curl http://172.28.128.3:9100/metrics
-
-
-
-
+- ansible uri tasks: 플레이북에서 현재 버전에서는 curl을 통한 쉘스크립트를 그대로 사용하였으나 uri 모듈을 사용하는 방법을 찾아봐야한다.
+- grafana comprised values: cpu와 메모리 값을 표현하는 테이블에서 값들이 각각 다른 컬럼으로 표현되는데 이를 하나의 컬럼으로 뭉치는 방법을 찾아야 한다.
+- grafana column name: 테이블에서 컬럼 이름을 변경하는 방법
 
 ## References
-download prometheus: https://prometheus.io/download/
+download prometheus packages: https://prometheus.io/download/
 simple prometheus explaination: https://itnext.io/monitoring-with-prometheus-using-ansible-812bf710ef43
 ansible slack kibana grafana: https://dzone.com/articles/how-to-get-metrics-for-alerting-in-advance-and-pre
 install promethus: https://fritshoogland.wordpress.com/2018/06/06/quick-install-of-prometheus-node_exporter-and-grafana/
 node exporter: https://prometheus.io/docs/guides/node-exporter/
 prometheus: http://www.markusz.io/posts/2017/10/27/monitoring-prometheus/
 prometheus pushgateway: https://github.com/prometheus/pushgateway
+### prometheus knowledge
+- presenter: http://172.28.128.3:9090
+### node-exporter
+node_exporter is aimed to gather host information and send it to prometheus.
+- systemctl status node_exporter
+- curl http://172.28.128.3:9100/metrics
 
