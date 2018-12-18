@@ -106,12 +106,26 @@ systemctl 명령으로 필요한 각 서비스들이 정상적으로 가동되�
 
 #### adding prometheus datasource
 데이터를 수집할 prometheus를 데이터소스로 추가
-1. grafana 웹하면의 왼쪽 메뉴에서 톱니바퀴 모양 클릭
+1. grafana 웹화면(http://172.28.128.3:3000)의 왼쪽 메뉴에서 톱니바퀴 모양 클릭
 2. *Data Sources* 선택
 3. 내용을 입력하는 화면에서 *Name* 입력하고, *Type*에 *Prometheus* 선택, *URL* 부분에 "http://localhost:9090" 입력 후 *Save & Test* 확인
 ![grafana-datasource](images/datasource-2.png)
 ### node-exporter configuration
+node-exporter는 각 모니터링 대상 서버에 설치되어 필요한 정보를 수집해오는 agent 역할을 한다. cpu, memory, disk 등 서버의 기본적인 모니터링 상태부터 네트워크 사용량, cpu interrupt 등 다양한 정보를 수집해오기 때문에 prometheus + grafana 연동시에는 거의 사용되고 있다. 이번 테스트에서도 기본 대시보드는 node-exporter를 가지고 만든 *Host Stats* 를 사용토록 하겠다.
+
+1. [grafana-host_stats](https://grafana.com/dashboards/9096) 접속하여 json 다운로드
+2. grafana 웹화면(http://172.28.128.3:3000)의 왼쪽 메뉴에서 *+* 표시 클릭
+3. *import* 선택
+4. *import* 화면에서 다운받은 json 파일을 선택하여 업로드
+5. 내용 입력 화면에서 *prometheus* 항목에 이전에 등록한 *data source* 선택
+![granfana-dashboard](images/import-dashboard.png)
+6. 입력한 대시보드 확인: 대시보드에서 *Host Stats - Prometheus Node Exporter 0.17.0*를 선택하면 아래와 같은 화면을 볼 수 있다.
+![grafana-hoststats](images/host-stats.png)
+
 ### pushgateway configuration
+pushgateway는 모니터링 대상 서버에서 prometheus로 데이터를 *PUSH*할 수 있도록 해주는 서비스이다. 위에서 설명한 바와 같이 prometheus는 *PULL* 방식으로 데이터를 직접 가져오도록 작동하기 때문에 *PUSH*를 위해서는 별도의 서비스가 필요하며, 이 기능을 하는 것이 *pushgateway* 이다.
+
+
 #### ansible playbook to gather information
 #### send metric to prometheus
 ### prometheus - check if metric is stored
