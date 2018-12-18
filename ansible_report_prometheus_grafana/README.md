@@ -52,6 +52,8 @@ ansible task -> pushgateway -> prometheus -> grafana
 
 ![prometheus_data_flow](https://478h5m1yrfsa3bbe262u7muv-wpengine.netdna-ssl.com/wp-content/uploads/2018/08/kubernetes_prom_diagram2.png)
 
+* 이미지 하단의 kubernetes는 관계없으므로 무시해도 됨.
+
 설정 순서는 다음과 같다.
 - grafana 접속 및 정상여부 확인
 - node-exporter 설정을 위한 json 다운로드 및 설정 적용
@@ -59,7 +61,55 @@ ansible task -> pushgateway -> prometheus -> grafana
 - prometheus에서 해당 metric을 정상적으로 수집했는지 확인
 - grafana의 대시보드에서 ansible로 수집한 데이터 표현 
 
+### Confirming Services
+systemctl 명령으로 필요한 각 서비스들이 정상적으로 가동되었는지 확인
+
+```shell
+[root@prometheus ansible]# for i in  grafana-server prometheus node_exporter pushgateway ;do systemctl status $i;done
+
+● grafana-server.service - Grafana instance
+   Loaded: loaded (/usr/lib/systemd/system/grafana-server.service; enabled; vendor preset: disabled)
+      Active: active (running) since Fri 2018-12-14 00:45:30 UTC; 3 days ago
+	       Docs: http://docs.grafana.org
+		    Main PID: 10249 (grafana-server)
+			   CGroup: /system.slice/grafana-server.service
+			              └─10249 /usr/sbin/grafana-server --config=/etc/grafana/grafana.ini --pidfile=/var/run/grafana/grafana-server.pid cfg:default.paths.logs=/var/log/grafana cfg:default...
+
+
+● prometheus.service - Prometheus
+   Loaded: loaded (/etc/systemd/system/prometheus.service; enabled; vendor preset: disabled)
+      Active: active (running) since Sun 2018-12-16 03:48:37 UTC; 1 day 20h ago
+	   Main PID: 16753 (prometheus)
+	      CGroup: /system.slice/prometheus.service
+		             └─16753 /home/prometheus/prometheus-2.5.0.linux-amd64/prometheus --config.file=/home/prometheus/prometheus-2.5.0.linux-amd64/prometheus.yml --storage.tsdb.path=/hom...
+					 
+● node_exporter.service - Node exporter
+   Loaded: loaded (/etc/systemd/system/node_exporter.service; enabled; vendor preset: disabled)
+      Active: active (running) since Fri 2018-12-14 05:23:59 UTC; 3 days ago
+	   Main PID: 12405 (node_exporter)
+	      CGroup: /system.slice/node_exporter.service
+		             └─12405 /home/prometheus/node_exporter-0.17.0.linux-amd64/node_exporter --collector.textfile.directory=/var/lib/node_exporter/metrics
+
+● pushgateway.service - Push Gateway
+   Loaded: loaded (/etc/systemd/system/pushgateway.service; enabled; vendor preset: disabled)
+      Active: active (running) since Fri 2018-12-14 04:24:30 UTC; 3 days ago
+	   Main PID: 11680 (pushgateway)
+	      CGroup: /system.slice/pushgateway.service
+		             └─11680 /home/prometheus/pushgateway-0.7.0.linux-amd64/pushgatew
+```
+
 ### Grafana basic configuration
+#### web console access
+웹브라우저를 통해 아래 grafana 대시보드를 접속
+- web access: http://172.28.128.3:3000
+- default id/pw: admin/admin
+
+#### adding prometheus datasource
+데이터를 수집할 prometheus를 데이터소스로 추가
+1. grafana 웹하면의 왼쪽 메뉴에서 톱니바퀴 모양 클릭
+2. *Data Sources* 선택
+3. 내용을 입력하는 화면에서 *Name* 입력하고, *Type*에 *Prometheus* 선택, *URL* 부분에 "http://localhost:9090" 입력 후 *Save & Test* 확인
+![grafana-datasource](images/datasource-2.png)
 ### node-exporter configuration
 ### pushgateway configuration
 #### ansible playbook to gather information
