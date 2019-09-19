@@ -152,10 +152,10 @@ def handler(event, context):
 Elasticsearch Version  | Plugins
 -------- | -----------------------
 7.1      | * ICU Analysis
-         | * Ingest Attachment Processor
-         | * Ingest User Agent Processor
-         | * Seunjeon Korean Analysis
-         | * more ...
+-         | * Ingest Attachment Processor
+-         | * Ingest User Agent Processor
+-         | * Seunjeon Korean Analysis
+-         | * more ...
 
 - Code `<p = requests.put(p_url, auth=awsauth, data=json.dumps(p_data), headers=headers)>` will create attachment pipeline.
 - Actual ingestion occurs in this code,`<r = requests.post(url, auth=awsauth, data=json.dumps(payload), headers=headers)>`
