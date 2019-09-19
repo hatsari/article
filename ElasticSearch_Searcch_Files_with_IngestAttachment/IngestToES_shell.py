@@ -7,12 +7,12 @@ from elasticsearch import Elasticsearch
 import logging
 import json
 
-#ES_HOST="https://search-lottechem-bqw3xcrcp2jbjd2jnizwdlz6fi.us-east-1.es.amazonaws.com"
+#ES_HOST="https://search-[your_endpoint].es.amazonaws.com"
 #ES_PORT="443"
 obj="sample.pdf"
 #INDEX_ID="4"
 ### new variables
-host = 'https://search-esfordocs-j7i6wjlelkxzfwdnwz654v3igq.us-east-1.es.amazonaws.com'
+host = 'https://search-[your_endpoint].es.amazonaws.com'
 index = 'docs-index'
 doc_type = '_doc'
 index_id = '1'

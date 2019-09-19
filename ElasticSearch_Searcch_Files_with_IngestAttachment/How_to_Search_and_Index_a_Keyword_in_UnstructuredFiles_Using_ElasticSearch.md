@@ -96,7 +96,7 @@ service = 'es'
 credentials = boto3.Session().get_credentials()
 awsauth = AWS4Auth(credentials.access_key, credentials.secret_key, region, service, session_token=credentials.token)
 
-host = 'https://search-esfordocs-j7i6wjlelkxzfwdnwz654v3igq.us-east-1.es.amazonaws.com'    # the Amazon ES domain, including https://
+host = 'https://search-[use_your_own_endpoint].us-east-1.es.amazonaws.com'    # the Amazon ES domain, including https://
 index = 'documents-index'
 doc_type = '_doc'
 p_url = host + '/' + '_ingest/pipeline/attachment'
