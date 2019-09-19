@@ -13,8 +13,6 @@ IHAC who wants to search a keyword in unstructured files as like pdf, doc, excel
 
 ![elasticsearch_diagram](images/elasticsearch_diagram.png)
 
-// ### relevant services: *ELASTICSEARCH*, *TEXTRACT*, *WORKDOCS*
-
 ## Keyword Search in various types of documents  with ElasticSearch
 ### AWS ElasticSearch Basic Configuration
 Creating ElasticSearch domain on AWS is very easy, so I'll skip the detailed configuration and for more information about creating ElasticSearch Domain, follow the below guide. For the test(or lower charging), you need to select two options.
