@@ -247,6 +247,7 @@ The function of ElasticSearch is to store files or logs, and make schema and ind
   - go to *Discover* menu of the kibana console
   - Search a keyword in Filters tab
 
+![elasticsearch_image](images/elasticsearch_result.png)
 ## Next Step
   - Keyword Search in image files with Textract (https://aws.amazon.com/blogs/machine-learning/automatically-extract-text-and-structured-data-from-documents-with-amazon-textract/)
   - finding out good use case of ElasticSearch, like viewing top indexed keyword or catching meaningful insight
