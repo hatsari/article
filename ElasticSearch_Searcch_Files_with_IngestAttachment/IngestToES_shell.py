@@ -54,5 +54,5 @@ if __name__ == '__main__':
 '''
 '''
 ## delete index
-# curl -XDELETE "https://search-docmgmt-iljka4hrox4iyfiscdbyedwvbe.us-east-1.es.amazonaws.com/unstructured_documents-index/*"
+# curl -XDELETE "https://search-[your_endpoint].es.amazonaws.com/[index_name]/*"
 '''
