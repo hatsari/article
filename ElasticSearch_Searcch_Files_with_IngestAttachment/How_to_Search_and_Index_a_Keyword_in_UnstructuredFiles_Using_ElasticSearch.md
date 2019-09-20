@@ -251,16 +251,24 @@ The function of ElasticSearch is to store files or logs, and make schema and ind
 
 ### Useful *curl* Command to Operate ElasticSearch
 - Create sample index
-`curl -XPUT http://localhost:9200/[index_name]/_doc/1 -d '{"director": "Burton, Tim", "genre": ["Comedy","Sci-Fi"], "year": 1996, "actor": ["Jack Nicholson","Pierce Brosnan","Sarah Jessica Parker"], "title": "Mars Attacks!"}' -H 'Content-Type: application/json'`
+```shell
+$ curl -XPUT http://localhost:9200/[index_name]/_doc/1 -d '{"director": "Burton, Tim", "genre": ["Comedy","Sci-Fi"], "year": 1996, "actor": ["Jack Nicholson","Pierce Brosnan","Sarah Jessica Parker"], "title": "Mars Attacks!"}' -H 'Content-Type: application/json'
+```
 
 - Change Index setting
-`curl -XPUT http://localhost:9200/[index_name]/_settings -d '{ "index": {"highlight.max_analyzed_offset" : 100000000 }}' -H 'Content-Type: application/json`
+```shell
+$ curl -XPUT http://localhost:9200/[index_name]/_settings -d '{ "index": {"highlight.max_analyzed_offset" : 100000000 }}' -H 'Content-Type: application/json
+```
 
 - Get Index Information
-`curl -XGET http://localhost:9200/[index_name]/_stats 
+```shell
+$ curl -XGET http://localhost:9200/[index_name]/_stats 
+```
 
 - Delete Index Data
-`curl -XDELETE http://localhost:9200/[index_name/*`
+```shell
+$ curl -XDELETE http://localhost:9200/[index_name/*
+```
 
 ## Next Step
   - Keyword Search in image files with Textract (https://aws.amazon.com/blogs/machine-learning/automatically-extract-text-and-structured-data-from-documents-with-amazon-textract/)
