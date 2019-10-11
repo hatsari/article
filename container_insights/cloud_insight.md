@@ -1,4 +1,10 @@
 # ECS 환경에서 Container Insight 활용
+
+Date: 10.10, 2019
+By Yongki, Kim
+
+이번 실습은 ECS환경에서 Container를 관리할 때 필요한 모니터링, 알람 설정 방법을 알려줍니다. ECS 클러스터를 *CloudWatch*의 *Container Insights* 기능을 통해 모니터링할 수있도록 구성하여 각 Task의 CPU, 메모리, 네트워크 사용량 등을 확인할 수 있습니다. 또한 알람 구성과 Notification 구성을 통해 원하는 성능지표에 대해 실시간으로 알림을 받을 수 있도록 구성할 수 있습니다.
+
 ## 기존 Amazon ECS 클러스터에서 Container Insights 설정
 기존 Amazon ECS 클러스터에서 Container Insights를 활성화하려면 다음 명령을 입력합니다.
 
@@ -14,7 +20,7 @@ $ aws ecs list-clusters
     ]
 }
 ```
-#### Container Insight 활성화
+### Container Insight 활성화
 aws ecs update-cluster-settings 명령을 통해 container Insights 기능을 해당 클러스터에 활성화 합니다.
 ``` shell
 $ aws ecs update-cluster-settings --cluster EcsLabPublicCluster --settings name=containerInsights,value=enabled
@@ -39,8 +45,12 @@ $ aws ecs update-cluster-settings --cluster EcsLabPublicCluster --settings name=
 }
 ```
 
+### ECS 웹콘솔에서 Container Insights 활성화 확인
+ECS 서비스 웹콘솔에 접속한 후, 왼쪽 메뉴에서 *Clusters* 메뉴선택하면, 클러스터 목록이 나타나고 해당 클러스터에 아래와 같이 *Container Insights* 가 활성화된 것을 확인할 수 있습니다.
+![container_insights_enabled](images/container_insights_enabled.png)
+
 ## Container Insights 지표 보기
-Container Insights를 설정하여 지표를 수집하고 난 후에는 CloudWatch 자동 대시보드에서 이러한 지표를 볼 수 있습니다.
+Container Insights를 설정하여 지표를 수집하고 난 후에는 CloudWatch 자동 대시보드에서 지표를 볼 수 있습니다.
 
 ### Container Insight 사용 방법
   1. https://console.aws.amazon.com/cloudwatch/에서 CloudWatch 콘솔을 엽니다.
@@ -56,14 +66,14 @@ Container Insights를 설정하여 지표를 수집하고 난 후에는 CloudWat
   6. 노드, Pod 또는 작업 수준에서 페이지 하단의 목록에 현재 표시된 한 개 이상의 리소스에 관한 로그를 보 려면 해당 리소스의 이름 옆에 있는 확인란을 선택합니다. 그런 다음 작업을 선택하고 목록에서 옵션 중 하나를 선택합니다. 그러면 해당 리소스의 로그 또는 AWS X-Ray 추적을 볼 수 있습니다. 새 브라우저가 나타나고 요청한 정보가 표시됩니다.
 
 ## CloudWatch Logs Insights을 사용하여 Container Insights 데이터 보기
-Container Insights는 CloudWatch Logs에 저장된 성능 로그 이벤트를 사용하여 지표를 수집합니다. 컨테이 너 데이터에 대한 추가 보기에서 CloudWatch Logs Insights 쿼리를 사용할 수 있습니다.
-CloudWatch Logs Insights에 대한 자세한 내용은 CloudWatch Logs Insights로 로그 데이터 분석을 참조하십시오.
+*Container Insights* 는 CloudWatch Logs에 저장된 성능 로그 이벤트를 사용하여 지표를 수집합니다. 컨테이 너 데이터에 대한 추가 보기에서 *CloudWatch Logs Insights* 쿼리를 사용할 수 있습니다.
+CloudWatch Logs Insights에 대한 자세한 내용은 *CloudWatch Logs Insights* 로 로그 데이터 분석을 참조하십시오.
 
 ### CloudWatch Logs Insights 사용 방법
-  1. https://console.aws.amazon.com/cloudwatch/에서 CloudWatch 콘솔을 엽니다.
+  1. https://console.aws.amazon.com/cloudwatch/ 에서 *CloudWatch* 콘솔을 엽니다.
   2. 왼쪽 탐색 창에서 Insights를 선택합니다.
   화면 상단 근처에 쿼리 편집기가 있습니다. CloudWatch Logs Insights를 처음으로 열면 이 상자에는 최 신 로그 이벤트 20개를 반환하는 기본 쿼리가 포함되어 있습니다.
-  3. 쿼리 편집기 위의 상자에서 쿼리할 Container Insights 로그 그룹을 선택합니다. 작업할 다음 예제 쿼리 에서는 로그 그룹 이름이 performance로 끝나야 합니다.
+  3. 쿼리 편집기 위의 상자에서 쿼리할 Container Insights 로그 그룹을 선택합니다. 작업할 다음 예제 쿼리 에서는 로그 그룹 이름이 *performance* 로 끝나야 합니다.
     ![container_insights_performance](images/container_insights_performance.png)
   로그 그룹을 선택하면 CloudWatch Logs Insights가 로그 그룹 내 데이터에서 필드를 자동으로 검색하고 오른쪽 창에 있는 검색된 필드에 표시합니다. 또한 이 로그 그룹의 로그 이벤트를 시간의 흐름에 따라 보 여주는 막대 그래프도 표시합니다. 이 막대 그래프에서는 테이블에 표시된 이벤트뿐만 아니라 쿼리 및 시간 범위와 일치하는 로그 그룹 내 이벤트의 분포를 보여줍니다.
 
@@ -85,3 +95,68 @@ CloudWatch Logs Insights에 대한 자세한 내용은 CloudWatch Logs Insights�
   ```
   stats avg(RunningTaskCount) as container_count by ServiceName
   ```
+
+## 장애 유발후, 모니터링 및 해결
+실습을 위해 메모리 용량을 통한 장애를 일부러 유발시킨후, 이를 모니터링하는 방법과 alarm 구성하는 방법을 알아봅니다. 이 후 해당 장애를 해결하기 위한 조치를 진행합니다.
+
+### 장애 유발
+Task의 개수를 EC2가 수용할 수 있는 메모리 용량보다 크게 하며 원하는 만큼의 Task 개수(Desired Tasks)를 실행하지 못하도록 합니다. 이번 Lab에서는 *EcsLabApi* 서비스의 *desired tasks* 개수를 4개로 조절하여 가동시키고자 하는 task 개수를 증가시킬 것입니다. 해당 task는 *task definition*에서 정의한대로 각 task가 512MB 메모리를 점유하며, 현재 task가 가동되는 EC2는 1GB 메모리가 할당되어 있는 상태이므로, 가동시키고자 하는 task개수(desired task)만큼 task가 가동되지 못할 것입니다. 이 현상은 *desired tasks* 개수와 *running tasks* 개수의 차이를 통해 확인할 수 있습니다.
+
+#### EcsLabApi 서비스의 Desired Tasks 개수 증가
+1. Amazon ECS 서비스의 *Clusters* 메뉴에서 "EcsLabPublicCluster" 클러스터 선택
+  ![container_insights_service_cluster](images/container_insights_service_cluster.png)
+2. *Services* 메뉴에서 *EcsLabApi* 서비스 선택
+  ![container_insights_service_service](images/container_insights_service_service.png)
+3. 화면에서 현재 *Desired count* 와 *Running count*가 *1*로 표기되어 있는 확인
+  ![container_insights_service_update](images/container_insights_service_update.png)
+4. 화면 우측 상단의 *Update* 메뉴를 선택
+5. *Number of tasks* 개수를 *4*로 입력한 후 *Skip to review* 선택
+  ![container_insights_service_config](images/container_insights_service_config.png)
+6. *Update Service* 를 선택하여 변경 적용
+  ![container_insights_service_confirm](images/container_insights_service_confirm.png)
+7. *Cluster:EcsLabPublicCluster* 화면에서 *Desired tasks* 개수와 *Running tasks* 개수 불일치 확인
+  ![container_insights_service_verify](images/container_insights_service_verify.png)
+
+### 모니터링을 통한 장애 확인
+클러스터, 서비스, 또는 Task에서 변경 또는 에러가 발생했을 때, 이에 대한 로그는 *Service* 메뉴의 *Event* 또는 *Cloud Watch*의 *container insights* 메뉴에서 확인할 수 있습니다.
+
+#### Event 항목을 통학 에러 확인
+*Service* 또는 *Task*의 상태를 변경하였을 때, 이에 해당하는 로그는 *Service* 메뉴의 *Event*탭에서 확인할 수 있습니다. 이 메뉴에서는 변경 사항에 대해 이벤트가 발생한 시간과 관련 메시지를 보여줍니다.
+  ![container_insights_event](images/container_insights_event.png)
+
+#### Container Insights 대시보드를 통한 개수 불일치 확인
+*Container Insights*는 *Desired Tasks*와 *Running Tasks*의 대시보드를 기본 제공합니다. 두 지표를 확인함으로써 원하는 만큼의 *Task*가 정상적으로 가동중인지 확인할 수 있습니다.
+1. Cloud Watch 의 Container Insights 선택
+    ![container_insights_menu](images/container_insights_menu.png)
+2. *Desired Tasks*와 *Running Tasks*의 대시보드 확인
+    ![container_insights_dashboard](images/container_insights_dashboard.png)
+
+### Alarm 및 Notification 구성 및 확인
+원하는 이벤트에 대해서는 *Alarm* 또는 *Notification* 구성을 통해 개별적으로 수신을 받을 수 있습니다. *Alarm* 의 경우, *CloudWatch* 의 알람 영역에 표현되며, *Notification* 의 경우, 이메일을 통해 수신이 가능합니다. 이번 실습에서는 *EcsLabApi* 서비스의 *Pending Tasks* 지표를 통해 Task가 정상적으로 가동되지 않는 상황이 발생했을 때, *Alarm* 을 받도록 설정하겠습니다.
+
+#### Alarm 및 Notification 설정 방법
+1. *CloudWatch* 의 *Alarms* 메뉴 선택한 후, *Create Alarm* 선택
+  ![container_insights_alarm](images/container_insights_alarm.png)
+2. *Create new alarm* 메뉴에서 *Metric* 항목의 *Select metric* 선택 \
+  ![container_insights_smetric](images/container_insights_smetric.png)
+3. 지표 중에서 *ECS/ContainerInsights* 선택 후, *ClusterName, ServiceName* 선택 후, *EcsLabApi* 서비스의 *PendingTaskCount* 지표 선택 후, *Select Metric* 선택
+  ![container_insights_pending](images/container_insights_pending.png)
+4. 알람 생성값 입력
+  4.1 *Alarm details* 항목 입력
+    - *Name*: alarm_ecslabapi_pending
+    - *Description*: alarm for ecslabapi pending tasks
+  4.2 *Actions* 항목 입력
+    - *Sending notification to*: *new list* 선택 후, *notification_list*
+    - *Email list*: [your email address]
+    - *Create Alarm* 선택
+  4.3 입력한 이메일 계정의 *확인 메일*에서 *confirm subscription* 선택
+  4.4 웹콘솔에서 *View Alarm* 선택 후, 생성 완료
+    ![container_insights_notification](images/container_insights_notification.png)
+
+### 장애 해결
+실습에서 발생시킨 이슈는 Task에서 필요로하는 메모리가 EC2가 보유하고 있는 메모리보다 많기 때문에 발생하는 것이므로 Task를 가동할 EC2 인스턴스의 개수를 증가시킴으로써 해결할 수 있습니다. ECS환경에서는 *Scale ECS Instances* 기능을 통해 필요시 클러스터 운영에 필요로하는 EC2 인스턴스를 손쉽게 추가할 수 있습니다.
+1. 탐색 창에서 클러스터를 선택하고 조정할 클러스터를 선택
+2. *Cluster*에서 *ECS Instances* 선택후, *Scale ECS Instances* 확인
+  ![container_insights_scale](images/container_insights_scale.png)
+3. Desired number of instances(원하는 인스턴스 개수)의 경우 클러스터를 조정할 인스턴스 개수를 입력하고 Scale(확장)을 선택합니다.
+* 참고: 최초 인스턴스를 확장하면 *auto scaling group*이 생성되고, 이 후에는 *Auto Scaling* 기능을 통해 인스턴스를 확장할 수 있습니다.
