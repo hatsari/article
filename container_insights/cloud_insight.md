@@ -4,6 +4,12 @@ Date: 10/11 2019, by Yongki, Kim(kyongki@)
 
 이번 실습은 ECS환경에서 Container를 관리할 때 필요한 모니터링, 알람 설정 방법을 설명합니다. ECS 클러스터를 *CloudWatch*의 *Container Insights* 기능을 통해 모니터링할 수있도록 구성하여 각 Task의 CPU, 메모리, 네트워크 사용량 등을 확인할 수 있습니다. 또한 알람 구성과 Notification 구성을 통해 원하는 성능지표에 대해 실시간으로 알림을 받을 수 있도록 구성할 수 있습니다.
 
+**주요 실습 과정 내용**
+* ECS 클러스터에 Container Insights 사용 방법
+* Container Insights Metric(지표)을 통한 알람(Alarm) 및 알림(Notification) 설정
+* ECS 콘솔 환경에서 서비스 Event 및 Log 확인
+* ECS Task를 가동할 EC2 인스턴스 확장 방법
+
 ## 기존 Amazon ECS 클러스터에서 Container Insights 설정
 기존 Amazon ECS 클러스터에서 Container Insights를 활성화하려면 다음 명령을 입력합니다.
 
@@ -160,3 +166,6 @@ Task의 개수를 EC2가 수용할 수 있는 메모리 용량보다 크게 하�
   ![container_insights_scale](images/container_insights_scale.png)
 3. Desired number of instances(원하는 인스턴스 개수)의 경우 클러스터를 조정할 인스턴스 개수를 입력하고 Scale(확장)을 선택합니다.
 * 참고: 최초 인스턴스를 확장하면 *auto scaling group*이 생성되고, 이 후에는 *Auto Scaling* 기능을 통해 인스턴스를 확장할 수 있습니다.
+
+## 결론
+이번 실습을 통해 ECS의 서비스 및 Task를 모니터링할 수 있는 Container Insights에 대해 알아보았습니다. Container Insights는 CloudWatch에서 제공하는 컨테이너 모니터링 도구이기 때문에 하나의 모니터링 도구에서 기존 EC2 환경뿐 아니라 컨테이너까지 성능지표를 확인할 수 있게 합니다. 또한 CPU, 메모리, 네트워크 사용량, 스토리지 사용량, 컨테이너 사용 개수 등 다양한 지표를 기본으로 제공하기 때문에 편리하게 컨테이너 상태를 알아볼 수 있습니다.
