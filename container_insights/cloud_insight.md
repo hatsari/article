@@ -15,8 +15,8 @@ $ aws ecs list-clusters
 
 {
     "clusterArns": [
-        "arn:aws:ecs:ap-northeast-2:1111oooo1111:cluster/default",
-        "arn:aws:ecs:ap-northeast-2:1111oooo1111:cluster/EcsLabPublicCluster"
+        "arn:aws:ecs:ap-northeast-2:xxxxxxxxxxxx:cluster/default",
+        "arn:aws:ecs:ap-northeast-2:xxxxxxxxxxxx:cluster/EcsLabPublicCluster"
     ]
 }
 ```
@@ -26,7 +26,7 @@ aws ecs update-cluster-settings 명령을 통해 container Insights 기능을 �
 $ aws ecs update-cluster-settings --cluster EcsLabPublicCluster --settings name=containerInsights,value=enabled
 {
     "cluster": {
-        "clusterArn": "arn:aws:ecs:ap-northeast-2:1111oooo1111:cluster/EcsLabPublicCluster",
+        "clusterArn": "arn:aws:ecs:ap-northeast-2:xxxxxxxxxxxx:cluster/EcsLabPublicCluster",
         "clusterName": "EcsLabPublicCluster",
         "status": "ACTIVE",
         "registeredContainerInstancesCount": 0,
@@ -53,7 +53,7 @@ ECS 서비스 웹콘솔에 접속한 후, 왼쪽 메뉴에서 *Clusters* 메뉴�
 Container Insights를 설정하여 지표를 수집하고 난 후에는 CloudWatch 자동 대시보드에서 지표를 볼 수 있습니다.
 
 ### Container Insight 사용 방법
-  1. https://console.aws.amazon.com/cloudwatch/에서 CloudWatch 콘솔을 엽니다.
+  1. https://console.aws.amazon.com/cloudwatch/ 에서 CloudWatch 콘솔을 엽니다.
   2. 화면 왼쪽 상단에서 개요 옆의 아래쪽 화살표를 선택하고 Container Insights를 선택합니다.
     클러스터에 대한 지표를 보여주는 그래프가 몇 개 나타납니다. 그래프 아래의 클러스터 목록에는 각 클 러스터에 대해 상태 및 기본 지표가 표시됩니다. 특정 클러스터에 대해 보기를 필터링하려면 가운데 상단의 상자를 사용합니다.
     ![container_insights_menu](images/container_insights_menu.png)
