@@ -181,7 +181,7 @@ Task의 개수를 EC2가 수용할 수 있는 메모리 용량보다 크게 하�
 2. *Cluster*에서 *ECS Instances* 선택후, *Scale ECS Instances* 확인
   ![container_insights_scale](images/container_insights_scale.png)
 3. Desired number of instances(원하는 인스턴스 개수)의 경우 클러스터를 조정할 인스턴스 개수를 입력하고 Scale(확장)을 선택합니다.
-* 참고: 최초 인스턴스를 확장하면 *auto scaling group*이 생성되고, 이 후에는 *Auto Scaling* 기능을 통해 인스턴스를 확장할 수 있습니다.
+* 참고: *Scale ECS Instances* 메뉴가 없을 경우, *auto scaling group* 메뉴를 통해 인스턴스 확장이 가능합니다. 해당 인스턴스는 *CloudFormation* 템플릿에 의해 자동으로 설정되어 생성되기 때문에 *Desired Capacity* 와 *Max* 만 원하는 값으로 수정하고 저장하면 자동으로 인스턴스가 생성됩니다.
 
 ## 결론
 이번 실습을 통해 ECS의 서비스 및 Task를 모니터링할 수 있는 Container Insights에 대해 알아보았습니다. Container Insights는 CloudWatch에서 제공하는 컨테이너 모니터링 도구이기 때문에 하나의 모니터링 도구에서 기존 EC2 환경뿐 아니라 컨테이너까지 성능지표를 확인할 수 있게 합니다. 또한 CPU, 메모리, 네트워크 사용량, 스토리지 사용량, 컨테이너 사용 개수 등 다양한 지표를 기본으로 제공하기 때문에 편리하게 컨테이너 상태를 알아볼 수 있습니다.
