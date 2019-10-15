@@ -17,7 +17,7 @@ Date: 10/11 2019, by Yongki, Kim(kyongki@)
 터미널에서 aws명령을 사용하기 위해서는 awscli 패키지 업데이트 및 자신의 AWS 자원을 접근하기 위한 인증 등록이 필요합니다.
 
 #### awscli upgrade
-aws 명령을 통해 Container Insight 모니터링을 활성화하기 위해서는 awscli를 업그레이드 해야 합니다. 이를 위한 명령어는 다음과 같습니다.
+aws 명령을 통해 Container Insight 모니터링을 활성화하기 위해서는 awscli를 1.16.200 버전 이상으로 업그레이드 해야 합니다. 이를 위한 명령어는 다음과 같습니다.
 
 ``` shell
 $ sudo pip install --upgrade pip
@@ -107,7 +107,7 @@ CloudWatch Logs Insights에 대한 자세한 내용은 *CloudWatch Logs Insights
   로그 그룹을 선택하면 CloudWatch Logs Insights가 로그 그룹 내 데이터에서 필드를 자동으로 검색하고 오른쪽 창에 있는 검색된 필드에 표시합니다. 또한 이 로그 그룹의 로그 이벤트를 시간의 흐름에 따라 보 여주는 막대 그래프도 표시합니다. 이 막대 그래프에서는 테이블에 표시된 이벤트뿐만 아니라 쿼리 및 시간 범위와 일치하는 로그 그룹 내 이벤트의 분포를 보여줍니다.
 
 ### 예제 쿼리
-쿼리 편집기에서 기본 쿼리를 다음 쿼리로 바꾸고 **쿼리실행(Run query)**을 선택합니다.
+쿼리 편집기에서 기본 쿼리를 다음 쿼리로 바꾸고 **Run query** 를 선택합니다.
   1. TaskFamily별 평균 CPU 사용량
   ```
   STATS avg(CpuUtilized) as avg_node_cpu_utilization by TaskDefinitionFamily
@@ -135,7 +135,7 @@ CloudWatch Logs Insights에 대한 자세한 내용은 *CloudWatch Logs Insights
 실습을 위해 메모리 용량을 통한 장애를 일부러 유발시킨후, 이를 모니터링하는 방법과 alarm 구성하는 방법을 알아봅니다. 이 후 해당 장애를 해결하기 위한 조치를 진행합니다. 사전에 *Alarm* 및 *Notification* 구성을 완료하여, 이슈 발생시 자동으로 알람이 뜨도록 설정합니다.
 
 ### Alarm 및 Notification 구성 및 확인
-원하는 이벤트에 대해서는 *Alarm* 또는 *Notification* 구성을 통해 개별적으로 수신을 받을 수 있습니다. *Alarm* 의 경우, *CloudWatch* 의 알람 영역에 표현되며, *Notification* 의 경우, 이메일을 통해 수신이 가능합니다. 이번 실습에서는 *EcsLabApi* 서비스의 *Pending Tasks* 지표를 통해 Task가 정상적으로 가동되지 않는 상황이 발생했을 때, *Alarm* 을 받도록 설정하겠습니다.
+원하는 이벤트에 대해서는 *Alarm* 또는 *Notification* 구성을 통해 개별적으로 수신을 받을 수 있습니다. *Alarm* 의 경우, *CloudWatch* 의 알람 영역에 표시되며, *Notification* 의 경우, 이메일을 통해 수신이 가능합니다. 이번 실습에서는 *EcsLabApi* 서비스의 *Pending Tasks* 지표를 통해 Task가 정상적으로 가동되지 않는 상황이 발생했을 때, *Alarm* 을 받도록 설정하겠습니다.
 
 #### Alarm 및 Notification 설정 방법
 1. *CloudWatch* 의 *Alarms* 메뉴 선택한 후, *Create Alarm* 선택
@@ -145,14 +145,18 @@ CloudWatch Logs Insights에 대한 자세한 내용은 *CloudWatch Logs Insights
 3. 지표 중에서 **ECS/ContainerInsights** 선택 후, **ClusterName,ServiceName** 선택 후, *EcsLabApi* 서비스의 **PendingTaskCount** 지표 선택 후, **Select Metric** 선택
   ![container_insights_pending](images/container_insights_pending.png)
 4. 알람 생성값 입력
+
   4.1 *Alarm details* 항목 입력
     - *Name*: alarm_ecslabapi_pending
     - *Description*: alarm for ecslabapi pending tasks
+
   4.2 *Actions* 항목 입력
     - *Sending notification to*: *new list* 선택 후, topic name으로 *notification_list* 입력
     - *Email list*: [your email address]
     - *Create Alarm* 선택
+
   4.3 입력한 이메일 계정의 *확인 메일*에서 *confirm subscription* 선택
+
   4.4 웹콘솔에서 *View Alarm* 선택 후, 생성 완료
     ![container_insights_notification](images/container_insights_notification.png)
 
