@@ -2,7 +2,7 @@
 
 Date: 10/11 2019, by Yongki, Kim(kyongki@)
 
-이번 실습은 ECS환경에서 Container를 관리할 때 필요한 모니터링, 알람 설정 방법을 설명합니다. ECS 클러스터를 *CloudWatch*의 *Container Insights* 기능을 통해 모니터링할 수있도록 구성하여 각 Task의 CPU, 메모리, 네트워크 사용량 등을 확인할 수 있습니다. 또한 알람 구성과 Notification 구성을 통해 원하는 성능지표에 대해 실시간으로 알림을 받을 수 있도록 구성할 수 있습니다.
+이번 실습은 ECS환경에서 Container를 관리할 때 필요한 모니터링, 알람 설정 방법을 설명합니다. ECS 클러스터를 *CloudWatch*의 *Container Insights* 기능을 통해 모니터링할 수있도록 구성하여 각 Task의 CPU, 메모리, 네트워크 사용량 등을 확인할 수 있습니다. 또한 알람 구성과 Notification 구성을 통해 원하는 성능지표에 대해 실시간으로 알림을 받을 수 있도록 구성합니다. 이를 통해 서비스와 컨테이너(Task) 상태 그리고 이를 운영하는 EC2 인스턴스 상태를 효과적으로 모니터링할 수 있습니다.
 
 **주요 실습 과정 내용**
 * ECS 클러스터에 Container Insights 사용 방법
@@ -11,10 +11,33 @@ Date: 10/11 2019, by Yongki, Kim(kyongki@)
 * ECS Task를 가동할 EC2 인스턴스 확장 방법
 
 ## 기존 Amazon ECS 클러스터에서 Container Insights 설정
-기존 Amazon ECS 클러스터에서 Container Insights를 활성화하려면 다음 명령을 입력합니다.
+기존 Amazon ECS 클러스터에서 Container Insights를 활성화하려면 다음 명령을 입력합니다. 아래 명령은 이전 실습에서 생성한 ecs-lab-workstation에서 실행합니다.
+
+### 사전 작업
+터미널에서 aws명령을 사용하기 위해서는 awscli 패키지 업데이트 및 자신의 AWS 자원을 접근하기 위한 인증 등록이 필요합니다.
+
+#### awscli upgrade
+aws 명령을 통해 Container Insight 모니터링을 활성화하기 위해서는 awscli를 업그레이드 해야 합니다. 이를 위한 명령어는 다음과 같습니다.
+
+``` shell
+$ sudo pip install --upgrade pip
+$ sudo /usr/local/bin/pip install --upgrade awscli
+```
+
+#### aws credential 등록
+aws ecs 명령이 정상적으로 작동하기 위해서는 *IAM* 에서 *Access Key* 와 *Secret Access Key* 를 생성하고, **aws configure** 명령을 통해 해당키를 등록해줘야 합니다.
+
+``` shell
+[ec2-user@ip-10-0-0-236 api]$ aws configure
+AWS Access Key ID [None]: [자신의 access key 입력]
+AWS Secret Access Key [None]: [자신의 secret access key 입력 ]
+Default region name [None]: ap-northeast-2
+```
+ - 위 명령에서 *region name* 인 *ap-northeast-2* 는 서울 리전을 의미하며, 필요시 자신의 ECS 자원이 존재하는 리전으로 변경해야 합니다.
 
 ### ECS 클러스터 목록 확인
 aws ecs list-clusters 명령을 통해 현재 클러스터 목록을 확인합니다.
+
 ``` shell
 $ aws ecs list-clusters
 
@@ -24,14 +47,6 @@ $ aws ecs list-clusters
         "arn:aws:ecs:ap-northeast-2:xxxxxxxxxxxx:cluster/EcsLabPublicCluster"
     ]
 }
-```
-
-### awscli upgrade
-aws 명령을 통해 Container Insight 모니터링을 활성화하기 위해서는 awscli를 업그레이드 해야 합니다. 이를 위한 명령어는 다음과 같습니다.
-
-``` shell
-$ sudo pip install --upgrade pip
-$ sudo /usr/local/bin/pip install --upgrade awscli
 ```
 
 ### Container Insight 활성화
