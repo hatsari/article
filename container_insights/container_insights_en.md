@@ -177,8 +177,6 @@ For the lab scenario, you will create container(Task) creation issue deliberatel
 
 ## Making Trouble
 Increase the Task counts more than EC2's memory capacity, then Tasks will fail to reach up to *desired Tasks*. In this lab, *desired tasks* value of *EcsLabApi* service will be adjusted to 4, then running tasks will increase automatically. Each Task is consuming 512MB memory as defined in *task definition* however, *running tasks* may not increase to 4 because EC2's memory capacity is total 1GB. User can identify the gap between *desired tasks* and *running tasks*.
-### 장애 유발
-Task의 개수를 EC2가 수용할 수 있는 메모리 용량보다 크게 하며 원하는 만큼의 Task 개수(Desired Tasks)를 실행하지 못하도록 합니다. 이번 Lab에서는 *EcsLabApi* 서비스의 *desired tasks* 개수를 4개로 조절하여 가동시키고자 하는 task 개수를 증가시킬 것입니다. 해당 task는 *task definition*에서 정의한대로 각 task가 512MB 메모리를 점유하며, 현재 task가 가동되는 EC2는 1GB 메모리가 할당되어 있는 상태이므로, 가동시키고자 하는 task개수(desired task)만큼 task가 가동되지 못할 것입니다. 이 현상은 *desired tasks* 개수와 *running tasks* 개수의 차이를 통해 확인할 수 있습니다.
 
 #### Increase *desired tasks* of *EcsLabApi*
 1. Select *EcsLabPublicCluster* Cluster on *Clusters* menu on Amazon ECS web console
@@ -196,28 +194,27 @@ Task의 개수를 EC2가 수용할 수 있는 메모리 용량보다 크게 하�
   ![container_insights_service_verify](images/container_insights_service_verify.png)
 
 ### Identifying Trouble Watching Monitoring Page
-When some errors or changes occur in Cluster, Service, or Tasks, those log appears on *Event* item of *Service* or *container insights* menu of *CloudWatch*.
+When some errors or changes occur in Cluster, Service, or Tasks, those log appears on *Event* of *Service* or *container insights* menu of *CloudWatch*.
 
-#### Event 항목을 통학 에러 확인
-*Service* 또는 *Task*의 상태를 변경하였을 때, 이에 해당하는 로그는 *Service* 메뉴의 *Event*탭에서 확인할 수 있습니다. 이 메뉴에서는 변경 사항에 대해 이벤트가 발생한 시간과 관련 메시지를 보여줍니다. 또한 이전 설정한 **ALARM** 과 **이메일알림** 을 통해서도 이슈를 확인할 수 있습니다.
+#### Confirming Error on Event Tab
+There is a *Event* Tab on *Service* menu, user can identify logs here. This log shows event time and relevant messages, as well user can check the event using *alarm* and *email notification* which you set up already.
   ![container_insights_event](images/container_insights_event.png)
 
-#### Container Insights 대시보드를 통한 개수 불일치 확인
-*Container Insights*는 *Desired Tasks*와 *Running Tasks*의 대시보드를 기본 제공합니다. 두 지표를 확인함으로써 원하는 만큼의 *Task*가 정상적으로 가동중인지 확인할 수 있습니다.
-1. Cloud Watch 의 Container Insights 선택
+#### Confirming the difference on Container Insights dashboard
+*Container Insights* provides *Desired Tasks* and *Running Tasks* out of box. Checking those two metrics, user can know *Task*'s running status.
+1. Press *Container Insights* of *CloudWatch*
     ![container_insights_menu](images/container_insights_menu.png)
-2. *Desired Tasks*와 *Running Tasks*의 대시보드 확인
-  - 대시보드 화면의 로그데이터를 받아오는 시간때문에 화면에 표시되는데 수분이 소요될 수 있습니다.
+2. Check the *Desired Tasks* and *Running Tasks* on dashboard
     ![container_insights_dashboard](images/container_insights_dashboard.png)
 
-
-### 장애 해결
-실습에서 발생시킨 이슈는 Task에서 필요로하는 메모리가 EC2가 보유하고 있는 메모리보다 많기 때문에 발생하는 것이므로 Task를 가동할 EC2 인스턴스의 개수를 증가시킴으로써 해결할 수 있습니다. ECS환경에서는 *Scale ECS Instances* 기능을 통해 필요시 클러스터 운영에 필요로하는 EC2 인스턴스를 손쉽게 추가할 수 있습니다.
-1. 탐색 창에서 클러스터를 선택하고 조정할 클러스터를 선택
-2. *Cluster*에서 *ECS Instances* 선택후, *Scale ECS Instances* 확인
+### Resolving The Issue
+The issue caused by memory capacity can be resolved by increasing the count of EC2 instance. User can adjust it easily with *Scale ECS Instances* feature.
+1. Select *Cluster* which you want to change
+2. *Cluster* -> *ECS Instances* tab, then press *Scale ECS Instances* menu
   ![container_insights_scale](images/container_insights_scale.png)
-3. Desired number of instances(원하는 인스턴스 개수)의 경우 클러스터를 조정할 인스턴스 개수를 입력하고 Scale(확장)을 선택합니다.
-* 참고: *Scale ECS Instances* 메뉴가 없을 경우, *auto scaling group* 메뉴를 통해 인스턴스 확장이 가능합니다. 해당 인스턴스는 *CloudFormation* 템플릿에 의해 자동으로 설정되어 생성되기 때문에 *Desired Capacity* 와 *Max* 만 원하는 값으로 수정하고 저장하면 자동으로 인스턴스가 생성됩니다.
+3. Input the value **2** in *Desired number of instances* field, and press **Scale**
+4. check the EC2 instances on EC2 console
+* If you can't find *Scale ECS Instances* menu, then use *auto scaling group* menu on *ECS Instances* tab. Instances running container will be increased automatically by CloudFormation template, so just adjusting the value of *Desired Capacity* and *Max* fields will create instances.
 
-## 결론
-이번 실습을 통해 ECS의 서비스 및 Task를 모니터링할 수 있는 Container Insights에 대해 알아보았습니다. Container Insights는 CloudWatch에서 제공하는 컨테이너 모니터링 도구이기 때문에 하나의 모니터링 도구에서 기존 EC2 환경뿐 아니라 컨테이너까지 성능지표를 확인할 수 있게 합니다. 또한 CPU, 메모리, 네트워크 사용량, 스토리지 사용량, 컨테이너 사용 개수 등 다양한 지표를 기본으로 제공하기 때문에 편리하게 컨테이너 상태를 알아볼 수 있습니다.
+## Conclusion
+Container Insights is useful tool to identify or monitor the status of ECS Cluster, Service, and Tasks. Also User can check the various container metrics, even EC2 instances within CloudWatch. Through this lab's guide, you already accomplished ECS monitoring ability as like CPU, memory, network usage, storage usage, and consuming container count etc.
