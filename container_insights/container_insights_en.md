@@ -2,6 +2,9 @@
 
 Date: 10/11 2019, by Yongki, Kim(kyongki@)
 
+- Korean: https://github.com/hatsari/article/blob/master/container_insights/container_insights.md
+- English: https://github.com/hatsari/article/blob/master/container_insights/container_insights_en.md
+
 This lab explains how to monitor container status on ECS using *Container Insights* of CloudWatch. Container Insights shows each Task's CPU, memory, network usage etc, as well combining with *alarm* and *notification* of *CloudWatch*, user can receive an alarm or email in real time.
 
 **Key Practices**
@@ -185,24 +188,15 @@ Task의 개수를 EC2가 수용할 수 있는 메모리 용량보다 크게 하�
 3. Confirm that the value of *desired tasks* and *running tasks* is **1**
   ![container_insights_service_update](images/container_insights_service_update.png)
 4. Press *Update* menu on upper left side of screen
-5. Input **4**
-#### EcsLabApi 서비스의 Desired Tasks 개수 증가
-1. Amazon ECS 서비스의 *Clusters* 메뉴에서 "EcsLabPublicCluster" 클러스터 선택
-  ![container_insights_service_cluster](images/container_insights_service_cluster.png)
-2. *Services* 메뉴에서 *EcsLabApi* 서비스 선택
-  ![container_insights_service_service](images/container_insights_service_service.png)
-3. 화면에서 현재 *Desired count* 와 *Running count*가 *1*로 표기되어 있는 확인
-  ![container_insights_service_update](images/container_insights_service_update.png)
-4. 화면 우측 상단의 *Update* 메뉴를 선택
-5. *Number of tasks* 개수를 *4*로 입력한 후 *Skip to review* 선택
+5. Input **4** in *Number of tasks* field, and press *Skip to review*
   ![container_insights_service_config](images/container_insights_service_config.png)
-6. *Update Service* 를 선택하여 변경 적용
+6. Apply changes pressing *Update Service*
   ![container_insights_service_confirm](images/container_insights_service_confirm.png)
-7. *Cluster:EcsLabPublicCluster* 화면에서 *Desired tasks* 개수와 *Running tasks* 개수 불일치 확인
+7. Confirm the difference of *Desired tasks* and *Running tasks* on *Cluster:EcsLabPublicCluster* screen
   ![container_insights_service_verify](images/container_insights_service_verify.png)
 
-### 모니터링을 통한 장애 확인
-클러스터, 서비스, 또는 Task에서 변경 또는 에러가 발생했을 때, 이에 대한 로그는 *Service* 메뉴의 *Event* 또는 *Cloud Watch*의 *container insights* 메뉴에서 확인할 수 있습니다.
+### Identifying Trouble Watching Monitoring Page
+When some errors or changes occur in Cluster, Service, or Tasks, those log appears on *Event* item of *Service* or *container insights* menu of *CloudWatch*.
 
 #### Event 항목을 통학 에러 확인
 *Service* 또는 *Task*의 상태를 변경하였을 때, 이에 해당하는 로그는 *Service* 메뉴의 *Event*탭에서 확인할 수 있습니다. 이 메뉴에서는 변경 사항에 대해 이벤트가 발생한 시간과 관련 메시지를 보여줍니다. 또한 이전 설정한 **ALARM** 과 **이메일알림** 을 통해서도 이슈를 확인할 수 있습니다.

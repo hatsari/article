@@ -2,6 +2,9 @@
 
 Date: 10/11 2019, by Yongki, Kim(kyongki@)
 
+- Korean: https://github.com/hatsari/article/blob/master/container_insights/container_insights.md
+- English: https://github.com/hatsari/article/blob/master/container_insights/container_insights_en.md
+
 이번 실습은 ECS환경에서 Container를 관리할 때 필요한 모니터링, 알람 설정 방법을 설명합니다. ECS 클러스터를 *CloudWatch*의 *Container Insights* 기능을 통해 모니터링할 수있도록 구성하여 각 Task의 CPU, 메모리, 네트워크 사용량 등을 확인할 수 있습니다. 또한 알람 구성과 Notification 구성을 통해 원하는 성능지표에 대해 실시간으로 알림을 받을 수 있도록 구성합니다. 이를 통해 서비스와 컨테이너(Task) 상태 그리고 이를 운영하는 EC2 인스턴스 상태를 효과적으로 모니터링할 수 있습니다.
 
 **주요 실습 과정 내용**
