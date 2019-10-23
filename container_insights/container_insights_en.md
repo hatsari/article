@@ -221,5 +221,12 @@ The issue caused by memory capacity can be resolved by increasing the count of E
 4. check the EC2 instances on EC2 console
 * If you can't find *Scale ECS Instances* menu, then use *auto scaling group* menu on *ECS Instances* tab. Instances running container will be increased automatically by CloudFormation template, so just adjusting the value of *Desired Capacity* and *Max* fields will create instances.
 
+#### Instance Auto scale                                                                                                                                                      
+1. Select **Auto Scaling** in **Add additional ECS Instances using Auto Scaling or Amazon EC2** sentence, then new EC2 console will appear. Next, select **Action** >> **Edit* menu to adjust the count of instances.
+  ![container_insights_autoscale1](images/container_insights_autoscale1.png)                                                                                                  
+
+2. Change the value of **Desired Capacity** and **Max** in menu.
+  ![container_insights_autoscale2](images/container_insights_autoscale2.png)
+
 ## Conclusion
 Container Insights is useful tool to identify or monitor the status of ECS Cluster, Service, and Tasks. Also User can check the various container metrics, even EC2 instances within CloudWatch. Through this lab's guide, you already accomplished ECS monitoring ability as like CPU, memory, network usage, storage usage, and consuming container count etc.
