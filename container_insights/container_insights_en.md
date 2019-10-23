@@ -39,6 +39,11 @@ Default region name [None]: ap-northeast-2
  - *ap-northeast-2* means Seoul region, you have to change the region name to where your resources, especially ECS, exist.
  - **CAVEAT**: After finishing the lab, you mush delete those secret information. It will be saved on *~/.aws/credentials* file
 
+### CloudWatch Container Insights activation
+On left pane of ECS console, select **Account Settings** menu. Next, check the **My IAM User or role account settings** to enable or disable Container Insights by default for clusters created by your current IAM user or role.
+                                                                                                                                                                              
+![container_insights_accountsetting](images/container_insights_accountsetting.png)
+
 ### ECS Cluster list
 Using **aws ecs list-clusters** command, user can confirm his own cluster list.
 
