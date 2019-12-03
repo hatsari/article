@@ -165,7 +165,7 @@ Elasticsearch Version  | Plugins
 - package name: ingestES.zip
 
 ```shell
-1. Copy the sample code into a file named CreateThumbnail.py.
+1. Copy the sample code into a file named ingestES.py
 
 2. Create a virtual environment.
 $ virtualenv ~/venv
@@ -262,7 +262,7 @@ $ curl -XPUT http://localhost:9200/[index_name]/_settings -d '{ "index": {"highl
 
 - Get Index Information
 ```shell
-$ curl -XGET http://localhost:9200/[index_name]/_stats 
+$ curl -XGET http://localhost:9200/[index_name]/_stats
 ```
 
 - Delete Index Data
