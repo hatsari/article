@@ -2,7 +2,7 @@
 Date: 2019.12.30 Yongki, Kim (kyongki@)
 
 ## Background
-It is really hassle to move mass small files to S3, however my customer asked me to do it. And so do I.  The condition was here. Each file size is under 200K and numbers of files are about a hundred and 30 million, moreover the file name should be changed because he wanted to restructure files and directories architecture. I attempted many of things to find out the suitable solution, but those solutions had its own limitation. At least, I created very useful and efficient python script to move it fast and without consuming bunch of memory and of disk spaces. Final version is here, if you don't want to read whole story and just know the final script, jump to here[Go to Final Section](## Final and Successful Solution: multi-part uploading)
+It is really hassle to move mass small files to S3, however my customer asked me to do it. And so do I.  The condition was here. Each file size is under 200K and numbers of files are about a hundred and 30 million, moreover the file name should be changed because he wanted to restructure files and directories architecture. I attempted many of things to find out the suitable solution, but those solutions had its own limitation. At least, I created very useful and efficient python script to move it fast and without consuming bunch of memory and of disk spaces. Final version is here, if you don't want to read whole story and just know the final script, jump to here; [Go to Final Section](README.md#final-and-successful-solution-multi-part-uploading)
 Using this solution, you will transfer hundred millions files in a week!! But, BE AWARE OF that consuming time will depend on the storage's read time, network bandwidth, and memory size and other infra component.
 
 ### Customer's Request
@@ -16,7 +16,7 @@ Using this solution, you will transfer hundred millions files in a week!! But, B
 - snowball edge data migration: https://d1.awsstatic.com/whitepapers/snowball-edge-data-migration-guide.pdf?did=wp_card&trk=wp_card
 
 ## Building The Test Environment
-At first, I didn't know that how could I start. I asked all SA in my company to get some insights. They replied eagerly with some useful tools, as like datacopy, s3 batch operation, and tar's transform option and so on.
+At first, I didn't know that how could I start. I asked all SA in my company to get some insights. They replied eagerly with some useful tools, as like *data sync*, *s3 batch operation*, and *tar's transform* option and so on.
 Based on my research and replies from my colleagues,I started to make test environment. Test environment consists of 100 directories with 100 files.
 
 ``` shell
@@ -202,7 +202,7 @@ aws s3 cp - s3://mybucket/batch01.tar --metadata snowball-auto-extract=true --en
 
 ## Final and Successful Solution: multi-part uploading
 However I couldn't content with this result when the script was incomplete still. So, I tried to find out how to remove the dependency of *smart_open* and produce the same result while adding metadata. The answer was in the source code in the *smart_open*. I had dug into the source code of *smart_open* and *multi-part uploading** was used there to deal with streaming data.
-Here is the finale script, the complete version.
+Here is the final script, the complete version.
 
 ``` python
 #!/bin/python
@@ -346,27 +346,40 @@ Logs/dir1/file_9
 Logs/dir1/file_10
 ```
 
+``` shell
     def rename_file(org_file)
+```
 This *rename_file* function make new file name with specified rule set. If user don't want to change the file name, comment it.
 
+``` shell
     error_file = ('error_%s_%s.log' % (source_file, current_time))
     successlog_file = ('success_%s_%s.log' % (source_file, current_time))
+```
+
 All archived files will be listed in *successlog_file* and if original file doesn't exist in the directory, this information will stored in *error_file*. This log will be useful to check which file is failed or not.
 
+``` shell
     batch_tar = ('snowball-batch-%s-%s.tar' % (source_file, current_time))
+```
 *batch_tar* and *key_name* are same variable, it means the name of tar file.
 
+``` shell
     def add_metadata_to_s3(bucket_name, batch_tar):
     def flush_mem(out):
+```
 Both *add_metadata_to_s3* and *flush_mem* is not used  in this code, but I remained it for future use.
 
+``` shell
     def create_mpu():
     def upload_mpu(mpu_id, data, index):
     def complete_mpu(mpu_id, parts):
+```
 These three functions are core component of this scripts. Using this *multi_part_upload* api, I can reduce the usage of memory and disk.
 
+``` shell
     out = io.BytesIO()
     out.getvalue()
+```
 *out* variable is dealing with streaming data, and *out.getvalue()* transfer the tar archived data into the sending buffer to snowball.
 
 ### Output of When Script run
