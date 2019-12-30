@@ -1,7 +1,7 @@
 #!/bin/bash
 
-s3_org=alex-org-bucket
-s3_dest=alex-dest-bucket
+s3_org=your-own-org-bucket
+s3_dest=your-own-dest-bucket
 
 dir_count=10
 file_count_per_dir=10
