@@ -14,7 +14,7 @@ import os.path
 from datetime import datetime
 import sys
 
-bucket_name = "alex-s3-mv-dest-seoul"
+bucket_name = "your-own-dest-seoul"
 s3 = boto3.client('s3', region_name='ap-northeast-2')
 #s3 = boto3.client('s3', region_name='ap-northeast-2', endpoint_url='https://s3.ap-northeast-2.amazonaws.com', aws_access_key_id=None, aws_secret_access_key=None)
 tarfiles_one_time = 1000
