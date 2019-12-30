@@ -16,7 +16,7 @@ from datetime import datetime
 ## 'smart_open' package is needed to run this program
 # pip install smart_open
 
-bucket_name = "alex-s3-mv-dest-seoul"
+bucket_name = "your-own-dest-seoul"
 s3 = boto3.client('s3', 'ap-northeast-2')
 transport_params = {'session': boto3.Session(profile_name='snowball'), 'resource_kwargs': { 'endpoint_url': 'https://s3.ap-northeast-2.amazonaws.com' }}
 tarfiles_one_time = 2000
