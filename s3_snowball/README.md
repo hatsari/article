@@ -21,7 +21,7 @@ At first, I would show you the performance result. The 1st snowball result is me
 
 | Target                       | Total Capacity | Consumed Time                    | Failed Objects |
 |                              |                | NAS -> Snowball | Snowball -> S3 |                |
-|------------------------------|----------------|-----------------|----------------|----------------|
+|------------------------------|:--------------:|:---------------:|:--------------:|----------------|
 | the 1st snowball performance | 2408 GB        | 1W              | 113 hour       | 954            |
 | the 2nd snowball performance | 14708 GB       | 1W              | 26 hour        | 0              |
 
