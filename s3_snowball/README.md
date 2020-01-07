@@ -19,8 +19,7 @@ At first, I would show you the performance result. The 1st snowball result is me
 - the 2nd snowball performance: uploading chunked files while archiving and renaming it.
 ----
 
-| Target                       | Total Capacity | Consumed Time   |                | Failed Objects |
-|                              |                | NAS -> Snowball | Snowball -> S3 |                |
+| Target                       | Total Capacity | NAS -> Snowball Time   | Snowball -> S3 Time | Failed Objects |
 |------------------------------|:--------------:|:---------------:|:--------------:|----------------|
 | the 1st snowball performance | 2408 GB        | 1W              | 113 hour       | 954            |
 | the 2nd snowball performance | 14708 GB       | 1W              | 26 hour        | 0              |
