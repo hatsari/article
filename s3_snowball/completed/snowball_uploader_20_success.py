@@ -38,8 +38,12 @@ import threading
 import time
 import argparse
 
-bucket_name = "your-own-dest-seoul"
-s3 = boto3.client('s3', endpoint_url='https://s3.ap-northeast-2.amazonaws.com')
+bucket_name = "kwangjae-internal-test-demo"
+#bucket_name = "your-own-dest-seoul"
+session = boto3.Session(profile_name='sbe1')
+s3 = session.client('s3', endpoint_url='http://172.26.230.81:8080')
+# or below
+#s3 = boto3.client('s3', endpoint_url='https://s3.ap-northeast-2.amazonaws.com')
 #s3 = boto3.client('s3', region_name='ap-northeast-2', endpoint_url='https://s3.ap-northeast-2.amazonaws.com', aws_access_key_id=None, aws_secret_access_key=None)
 target_path = '.'   ## very important!! change to your source directory
 max_tarfile_size = 70 * 1024 ** 3 # 70GB
