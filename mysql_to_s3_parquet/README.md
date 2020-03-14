@@ -91,12 +91,14 @@ aws s3 mb s3://alex-rds-s3/employees/
 ```
 
 ### performance
+#### employees table
 - table name: employees
 - rows: 300,024
 - elapsed time: 49sec
   - sqoop time: 26sec
   - distcp time: 23 sec
 
+#### salaries table
 - table name: salaries
 - rows: 2,844,047
 - elapsed time: 52sec
