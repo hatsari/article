@@ -1,0 +1,152 @@
+#+TITLE: Simple Git Tutorial
+#+Description: Using emacs org-mode, write git manual
+#+AUTHOR: Alex, Yongki Kim
+#+Date: 01.23.2017
+
+
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
+#+OPTIONS: author:t c:nil creator:nil d:(not "LOGBOOK") date:t e:t
+#+OPTIONS: email:nil f:t inline:t num:t p:nil pri:nil prop:nil stat:t
+#+OPTIONS: tags:t tasks:t tex:t timestamp:t title:t toc:t todo:t |:t
+#+LANGUAGE: en
+#+SELECT_TAGS: export
+#+EXCLUDE_TAGS: noexport
+#+CREATOR: Emacs 25.3.1 (Org mode 8.3.4)
+#+startup: beamer
+#+LaTeX_CLASS: beamer
+#+LaTeX_CLASS_OPTIONS: [bigger]
+#+BEAMER_FRAME_LEVEL: 2
+#+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
+
+#+Ref: org,beamer,presentation, https://orgmode.org/worg/exporters/beamer/tutorial.html
+
+* Preface
+presentation mode: [[./git_usage_20180113.html][Git Usage]]
+-----
+
+This article shows you how to create simple git server and explain how to use git command.
+for example, git clone, add, commit, push. 
+most important thins is to understand the git's concept and basic terminology, if not, it's not easy to soak into git world.
+
+* Git Concept
+** Basic Terminology
+[[./git-term.png]]
+
+  | working tree    | the set of working files for the repository. these files are changed and committed to repository.                        |
+  | stage(or index) | the place to store changes in the working tree before the commit.                                                        |
+  | repository      | origin: normally indicate remote repository                                                                              |
+  | branch          | a named pointer to a commit, *master* is default.                                                                           |
+  |                 | master: normall your own branch                                                                                          |
+  |                 | check out: selecting a branch                                                                                            |
+  | tag             | a commit which uniquely identifies a version of the Git repository.                                                      |
+  | pull request    | proposing your changes and requesting that someone review and pull in your contribution and merge them into their branch |
+ 
+
+#+BEGIN_QUOTE
+for more detailed explaination, please refer to http://www.vogella.com/tutorials/Git/article.html
+#+END_QUOTE
+
+
+** Git Operation
+[[./git-operations.png]]
+
+* SSH Setting for Git
+remember just one thing. 
+Private is on client and public key is on server.
+** Necessary Command
+  - generating ssh key: ssh-keygen -f ~/.ssh/git.priv
+  - copy ssh public key: cat git.priv | ssh git@server "cat >> .ssh/authorized_keys" 
+  - ssh-add ~/.ssh/git.priv
+
+* Setting up private git repository
+Sometimes you should create your own git repository, but github, specially in closed network environment.
+So the first section is to make your own git repository.
+  - ref: https://git-scm.com/book/en/v2/Git-on-the-Server-Setting-Up-the-Server
+
+** demo environment
+To make you understand easily, I assume below demo environment.
+  ** demo environment **
+  - git server: vm1
+  - git client computer: vm2
+  - developer1: John on vm2
+  - developer2: Jane on vm2
+
+** git user on git server
+At first, we will create git user to allow other user's connection.
+#+BEGIN_QUOTE
+Original guide lets user create ssh-key, but I'll just use password type on ssh connection.
+It is better to use ssh-key, but I want to keep focus on the git based command.  
+#+END_QUOTE
+
+#+BEGIN_SRC 
+## on git server
+vm1$ sudo adduser git
+vm1$ sudo passwd git
+vm1$ su git
+#+END_SRC shell
+
+** make git repository on git server
+Let's create *project* directory and initialize it.
+ 
+#+BEGIN_SRC shell 
+## on git server
+vm1$ mkdir ~git/test_project.git
+vm1$ cd ~git/test_project.git
+vm1$ git init --bare
+Initialized empty Git repository in /home/git/test_project.git/ ## <-- remember this path, copy it. 
+#+END_SRC shell
+
+** Create John's project named 'test_project'
+John will create the 1st project.
+
+#+BEGIN_SRC shell 
+## as John user on vm2
+john@vm2$ mkdir myproject
+john@vm2$ cd myproject
+john@vm2$ git init
+john@vm2$ echo "the first released project" > README.md
+john@vm2$ git add .
+john@vm2$ git commit -m 'the 1st'
+john@vm2$ git remote add origin git@vm1:/home/git/test_project.git ## <-- paste it from above
+john@vm2$ git push origin master
+#+END_SRC shell
+
+You will get some _password_ message for ssh-key after ** git push origin master ** command.
+Then, press *ENTER* and you will be asked 'ssh password', at this time, input *git's password*.
+** Clone 'test_project' for Jane 
+
+Jane will modify the file and push to master.
+
+#+BEGIN_SRC shell 
+## as Jane user on vm2
+jane@vm2$ git clone git@vm1:/home/git/test_project.git
+jane@vm2$ cd test_project
+jane@vm2$ echo "jane's code is add here" >> README.md
+jane@vm2$ git add README.md
+jane@vm2$ git commit -m 'new code added by jane'
+jane@vm2$ git push origin master
+#+END_SRC shell
+
+
+* Basic Git Usage
+ - ref: kor: https://backlog.com/git-tutorial/kr/intro/intro1_2.html
+ - ref: en: http://rogerdudler.github.io/git-guide/
+** Online Git Practice 
+just follow the below sandbox, this is better than I can explain
+  -  https://try.github.io/levels/1/challenges/1
+
+
+* Git Workflow
+** Workflow Diagram
+[[./git-workflow.jpg]]
+
+  - ref: https://guides.github.com/activities/hello-world/
+
+#+BEGIN_SRC shell 
+
+#+END_SRC shell
+
+* Conclution
+Git is very useful to manage your contents not only source codes but also your own documents. 
+Also in this devops erra, knowing the git workflow makes you communicate with other organization easily.
+I hope this document to be helpful.

@@ -1,0 +1,50 @@
+* minishift on mac
+## date: 2018. 03. 09
+** fetch proper file
+file location: [https://github.com/minishift/minishift/releases]
+
+#+BEGIN_SRC EXAMPLE
+curl -L minishift-1.14.0-darwin-amd64.tgz -o minishift.tgz
+tar xzvf minishift.tgz
+#+END_SRC
+
+** installation on mac
+file location: https://docs.openshift.org/latest/minishift/getting-started/setting-up-driver-plugin.html#xhyve-driver-install ~
+
+*** install xhyve driver
+#+BEGIN_SRC shell
+$ brew install docker-machine-driver-xhyve
+
+# docker-machine-driver-xhyve need root owner and uid
+$ sudo chown root:wheel $(brew --prefix)/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve
+$ sudo chmod u+s $(brew --prefix)/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve
+#+END_SRC 
+*** start minishift
+#+BEGIN_SRC shell
+$ minishift-1.14.0-darwin-amd64/minishift start --vm-driver xhyve
+#+END_SRC
+
+** install oc client
+file location: [https://www.openshift.org/download.html]
+#+BEGIN_SRC shell
+$ brew install openshift-cli
+#+END_SRC 
+
+** access to console
+- for broswer: https://192.168.64.2:8443/console/
+- oc login https://192.168.64.2:8443
+- user information: developer/developer
+  admin user access: oc login -u system:admin https://192.168.64.2:8443
+
+** simple development
+*** hellowold java
+ref: [https://blog.novatec-gmbh.de/getting-started-minishift-openshift-origin-one-vm/]
+*** spark example
+#+BEGIN_SRC shell
+oc new-project spark
+oc project spark
+oc adm policy add-scc-to-user anyuid -z default
+oc process -f https://raw.githubusercontent.com/antoniogallegosaez/ocpmix/master/templates/spark-template.yaml | oc create -f -
+
+#+END_SRC
+
