@@ -1,0 +1,24 @@
+---
+- name: test of dictionary variables
+  hosts: localhost
+  vars:
+    - target1:
+        file: copy_file1
+        src: src_file1
+        dest: dest_file1
+    - target2:
+        file: copy_file2
+        src: src_file2
+        dest: dest_file2
+    - target3:
+        file: copy_file3
+        src: src_file3
+        dest: dest_file3
+  tasks:
+    - name: print each file ans src and dest 
+      debug:
+        msg: "{{ item.file}} is copied from {{ item.src }} to {{ item.dest }}"
+      with_items:
+        - "{{ target1 }}"
+        - "{{ target2 }}"
+        - "{{ target3 }}"

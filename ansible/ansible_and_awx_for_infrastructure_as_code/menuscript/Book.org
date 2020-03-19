@@ -1,0 +1,15 @@
+* Ansible and AWX for IAC(Infrastructure as Code)
+
+** TODO whole book
+  - [ ] create a index
+*** TODO idea for adding ones
+
+** Ansible for Automation
+*** dfjkdjflads
+jdkfjalkdfjlaskdfj
+dklfjalsdkfjlkasdfjfklajkjkjlkjkjk
+***  dkfjkadsjfkd
+
+** AWX for Organization
+
+chapter1.txt

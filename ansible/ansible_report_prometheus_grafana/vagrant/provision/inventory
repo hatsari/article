@@ -1,0 +1,1 @@
+prometheus ansible_host=172.28.128.3 ansible_user=vagrant
