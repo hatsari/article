@@ -43,7 +43,7 @@ If not, that call doesn't be operated because tower thinks request host is not v
 For instance, "hosts: rhel71" is defined in playbook, below call_simple_command.sh will run well on only rhrl71.
 Also, before calling the job, rhel71 host should be in inventory though. 
 
-![job_template_example](https://github.com/hatsari/article/blob/master/job_template_example.png?raw=true)
+![job_template_example](job_template_example.png)
 
 ## Test to execute job template using curl
 reference document is below:
@@ -109,7 +109,7 @@ Absolutely, run the script on rhel71.
 3. Execution result
 - The result shows the original value, var1: yongki, var2: alex
 
-![no_ext_var](https://github.com/hatsari/article/blob/master/no_vars_curl.png?raw=true)
+![no_ext_var](no_vars_curl.png)
 
 ### Executing with extra_var argument
 1. Creating script calling REST API
@@ -173,7 +173,7 @@ Absolutely, run the script on rhel71 also.
 - I intended to replace the value of "var1" from "yongki" to "hello", but the result shows just original value.
 It didn't work properly.
 
-![no_ext_var](https://github.com/hatsari/article/blob/master/no_vars_curl.png?raw=true)
+![no_ext_var](no_vars_curl.png)
 
 4. dubugging
 To solve the issue, I activated "**Prompt on launch**" in Job Template Configuration GUI.
@@ -226,23 +226,23 @@ To pass the extra-vars to job template, it needs to activate "Prompt on launch"
 
 Result is below:
 
-![exec_tower-cli](https://github.com/hatsari/article/blob/master/exec_tower-cli.png?raw=true)
+![exec_tower-cli](exec_tower_cli.png)
 
 3. Verification
 
-![result-ext-var-tower-cli](https://github.com/hatsari/article/blob/master/extra_vars_tower-cli.png?raw=true)
+![result-ext-var-tower-cli](extra_vars_tower_cli.png)
 
 You can see "**hello world**", it means values of extra_vars are changed correctly.
 Especially, even the host which not registered in inventory can execute a job template using tower-cli.
 Already I mentioned that curl command with host_key doesn't work at all on the host which not in inventory and "**hosts:**".
 
-![tower-cli-on-external-host](https://github.com/hatsari/article/blob/master/tower-cli_external_host.png?raw=true)
+![tower-cli-on-external-host](tower_cli_external_host.png)
 
 ### job monitoring with tower-cli
 It's needed to monitor the job status from integrated host when job running.
 And this simple command shows the job log stream and the result of job.
 
-![tower cli job monitor](https://github.com/hatsari/article/blob/master/job_monitor_tower-cli.png?raw=true)
+![tower cli job monitor](job_monitor_tower_cli.png)
 
 or you can choose the webhook of tower's notificaion feature so you can receive the result when it is finished or failed.
 another option is to use *uri* module of playbook. Here is a simple playbook code.
