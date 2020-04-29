@@ -25,3 +25,4 @@ s3-website.ap-northeast-2.amazonaws.com.
 
 ## reference
 - https://aws.amazon.com/ko/blogs/korea/anew-vpc-endpoint-for-amazon-s3/
+- https://soul0.tistory.com/591
