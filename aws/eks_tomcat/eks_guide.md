@@ -84,7 +84,7 @@ aws iam create-policy \
     --policy-document https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.1.6/docs/examples/iam-policy.json
 
 #### set PolicyARN, get from previous command
-export PolicyARN="arn:aws:iam::253679086765:policy/ALBIngressControllerIAMPolicy"
+export PolicyARN="......."
 
 #### enable IAM OIDC provider
 eksctl utils associate-iam-oidc-provider --region=ap-northeast-2 --cluster=alex-kube --approve
