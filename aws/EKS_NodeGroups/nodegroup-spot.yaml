@@ -1,0 +1,21 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: alex-kube
+  region: ap-northeast-2
+nodeGroups:
+#managedNodeGroups:
+  - name: spot-workers
+    labels:
+      lifecycle: spot
+    #taints:
+      #spotInstance: true:PreferNoSchedule
+    minSize: 2
+    maxSize: 5
+    instancesDistribution: # At least two instance types should be specified
+      instanceTypes:
+        - m4.large
+        - t3.small
+      onDemandBaseCapacity: 0
+      onDemandPercentageAboveBaseCapacity: 0 # all the instances will be spot instances
+      spotInstancePools: 3

@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "tomcat-deployment"
+  namespace: "default"
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: "tomcat-alex"
+    spec:
+      containers:
+      - image: 253679086765.dkr.ecr.ap-northeast-2.amazonaws.com/eks-tomcat:latest
+        imagePullPolicy: Always
+        name: "tomcat-alex"
+        ports:
+        - containerPort: 8080
+      nodeSelector:
+        lifecycle: ondemand

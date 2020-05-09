@@ -1,0 +1,10 @@
+- Cluster: alex-kube
+  CreationTime: "2020-04-30T00:53:11.257Z"
+  DesiredCapacity: 3
+  ImageID: ""
+  InstanceType: t3.medium
+  MaxSize: 4
+  MinSize: 1
+  Name: standard-workers
+  NodeInstanceRoleARN: ""
+  StackName: eksctl-alex-kube-nodegroup-standard-workers
