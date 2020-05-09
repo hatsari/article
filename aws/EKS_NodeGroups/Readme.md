@@ -31,7 +31,7 @@ ip-192-168-27-202.ap-northeast-2.compute.internal   Ready    <none>   93m   v1.1
 ip-192-168-50-93.ap-northeast-2.compute.internal    Ready    <none>   93m   v1.15.11-eks-af3caf   *spot*
 ```
 
-### Attache label to current nodes(if with no label)
+### Attache label to current nodes(if without label)
 To distinguish with new nodegroup, existing nodegroup should have *spot* label, if there is no label in nodes.
 ``` shell
 kubectl label nodes --all 'lifecycle=spot'
