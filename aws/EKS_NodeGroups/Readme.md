@@ -123,7 +123,7 @@ spec:
         app: "tomcat-alex"
     spec:
       containers:
-      - image: 253679086765.dkr.ecr.ap-northeast-2.amazonaws.com/eks-tomcat:latest
+      - image: xxx.ecr.ap-northeast-2.amazonaws.com/eks-tomcat:latest
         imagePullPolicy: Always
         name: "tomcat-alex"
         ports:
@@ -187,3 +187,4 @@ tomcat-deployment-5785794b45-sxchz   1/1     Running   0          30s     192.16
 ## References
 - eksworkshop: https://eksworkshop.com/beginner/150_spotworkers/workers/
 - docs.aws for spot instance: https://aws.amazon.com/ko/premiumsupport/knowledge-center/eks-multiple-node-groups-eksctl/
+- unmanaged nodegroup for spot instance: https://github.com/aws/containers-roadmap/issues/583
