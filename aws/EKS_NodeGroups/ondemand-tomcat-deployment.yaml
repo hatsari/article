@@ -11,7 +11,7 @@ spec:
         app: "tomcat-alex"
     spec:
       containers:
-      - image: 253679086765.dkr.ecr.ap-northeast-2.amazonaws.com/eks-tomcat:latest
+      - image: xxx.amazonaws.com/eks-tomcat:latest
         imagePullPolicy: Always
         name: "tomcat-alex"
         ports:
