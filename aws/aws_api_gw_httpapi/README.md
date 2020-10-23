@@ -22,15 +22,17 @@ API Gateway에서 HTTP API를 생성하기 위해서는 [AWS 웹콘솔](https://
 ### Q) *testapi*의 */book* 경로 들어오는 요청을 www.amazon.com/book2 로 전달하고 싶어요. 어서 해주세요!
 특정 경로로 들어오는 요청을 다른 URL 경로로 전달하기 위해서는*/book* 경로를 위한 *Route*를 만들고, 외부로의 전달을 위한 *http integration*을 생성해야합니다. 이 때 타겟 경로는 public domain이어 합니다. 사설 도메인으로 연결하는 방법은 아래 *사설URL로 전달* 부분에서 설명드리겠습니다.
 
-#### */book* Route 만들기
+#### API 경로 */book* Route 만들기
 1. 왼쪽 메뉴에서 *Routes* 선택하고, *Create* 선택
+
   ![route](images/route-1.png)
 
 2. 경로 이름을 입력하고 *Create* 선택
 경로를 생성할 때, 사용할 GET/POST/PUSH 등 Method를 선택할 수 있으며, 예제에서는 *ANY*를 사용했습니다.
+
   ![route](images/routeBook.png)
 
-#### *www.amazon.com/book2* 연결하기
+#### API 경로와 *www.amazon.com/book2* 연결하기
 1. 생성한 */book* 경로에서 Method를 선택하면(여기서는 ANY), 다른 서비스와 연동할 수 있는 *Integration*을 연결 또는 생성할 수 있습니다.
 ![route](images/integ.png)
 
