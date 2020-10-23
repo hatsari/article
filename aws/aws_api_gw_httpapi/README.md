@@ -16,7 +16,7 @@ API Gateway에서 HTTP API를 생성하기 위해서는 [AWS 웹콘솔](https://
 ![createApi](images/createApi-1.png)
 
 이 때, 방금 생성한 api를 외부에서 접속할 수 있는 경로가 만들어지는데 이는 stage에서 확인하실 수 있습니다.
-![accessUrl](images/accessUrl.png)
+![accessUrl](images/accessUrl-1.png)
 
 ## 특정 URL로 전달(HTTP Integration)
 ### Q) *testapi*의 */book* 경로 들어오는 요청을 www.amazon.com/book2 로 전달하고 싶어요. 어서 해주세요!
@@ -25,6 +25,7 @@ API Gateway에서 HTTP API를 생성하기 위해서는 [AWS 웹콘솔](https://
 #### */book* Route 만들기
 1. 왼쪽 메뉴에서 *Routes* 선택하고, *Create* 선택
 ![route](images/route-1.png)
+
 
 2. 경로 이름을 입력하고 *Create* 선택
 경로를 생성할 때, 사용할 GET/POST/PUSH 등 Method를 선택할 수 있으며, 예제에서는 *ANY*를 사용했습니다.
