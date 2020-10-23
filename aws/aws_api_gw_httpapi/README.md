@@ -13,7 +13,7 @@ HTTP API를 사용하기 위해 당연히 [공식문서](https://docs.aws.amazon
 ## 기본 HTTP API 생성
 ### Q) HTTP API는 어떻게 만드나요? 해주세요!
 API Gateway에서 HTTP API를 생성하기 위해서는 [AWS 웹콘솔](https://ap-northeast-2.console.aws.amazon.com/apigateway/main/apis?region=ap-northeast-2)에서 API Gateway를 선택합니다. 이후 *Create API*를 선택하고, *API name*을 기록한 후 계속 *다음*을 누르고 마지막에 *Create*을 선택합니다. 이 단계에서는 *integration*이나 *route*같은 별도 설정을 하지 않으셔도 됩니다.
-![createApi](images/createApi.png)
+![createApi](images/createApi-1.png)
 
 이 때, 방금 생성한 api를 외부에서 접속할 수 있는 경로가 만들어지는데 이는 stage에서 확인하실 수 있습니다.
 ![accessUrl](images/accessUrl.png)
