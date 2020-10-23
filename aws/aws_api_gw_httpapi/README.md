@@ -24,7 +24,7 @@ API Gateway에서 HTTP API를 생성하기 위해서는 [AWS 웹콘솔](https://
 
 #### */book* Route 만들기
 1. 왼쪽 메뉴에서 *Routes* 선택하고, *Create* 선택
-![route](images/route.png)
+![route](images/route-1.png)
 
 2. 경로 이름을 입력하고 *Create* 선택
 경로를 생성할 때, 사용할 GET/POST/PUSH 등 Method를 선택할 수 있으며, 예제에서는 *ANY*를 사용했습니다.
