@@ -13,8 +13,10 @@ HTTP API를 사용하기 위해 당연히 [공식문서](https://docs.aws.amazon
 ## 기본 HTTP API 생성
 API Gateway에서 HTTP API를 생성하기 위해서는 [AWS 웹콘솔](https://ap-northeast-2.console.aws.amazon.com/apigateway/main/apis?region=ap-northeast-2)에서 API Gateway를 선택합니다. 이후 _Create API_를 선택하고, _API name_을 기록한 후 계속 _다음_을 누르고 마지막에 _Create_을 선택합니다. 이 단계에서는 _integration_이나 _route_같은 별도 설정을 하지 않으셔도 됩니다.
 ![createApi](images/createApi.png)
+
 이 때, 방금 생성한 api를 외부에서 접속할 수 있는 경로가 만들어지는데 이는 stage에서 확인하실 수 있습니다.
 ![accessUrl](images/accessUrl.png)
+
 ## 특정 URL로 전달(HTTP Integration)
 ### Q) _testapi_의 _/book_ 경로 들어오는 요청을 www.amazon.com/book2 로 전달하고 싶어요
 특정 경로로 들어오는 요청을 다른 URL 경로로 전달하기 위해서는 _http integration_을 사용해야 합니다.
